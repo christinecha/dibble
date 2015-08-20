@@ -1,15 +1,38 @@
 var TodoList = React.createClass({
+
   render: function() {
-    var createItem = function(todos, index){
-      return <li key={index}>{todos}</li>;
-    };
-    return <ul>{this.props.todos.map(createItem)}</ul>;
+    var todoitem = this.props.todos.map(function(todo){
+      return <Item blah={todo}/>
+    });
+    return <ul>{todoitem}</ul>;
   }
+
 });
+
+var Item = React.createClass({
+  getInitialState(){
+    return {checked: false};
+  },
+
+  toggleCheck: function(){
+    console.log("clicked it", this.state.checked);
+    var checked = this.state.checked;
+    this.setState({checked: !checked});
+  },
+
+  render: function(){
+    var cx = React.addons.classSet;
+    var liClass = cx({
+      checked: this.state.checked
+    })
+    return <li onClick={this.toggleCheck} className={liClass}>{this.props.blah}</li>
+  }
+})
 
 var TodoApp = React.createClass({
   getInitialState: function(){
     return {
+      complete: false,
       text:"",
       todos:[],
       todoLists:[],
@@ -20,6 +43,7 @@ var TodoApp = React.createClass({
     this.setState({text: e.target.value})
   },
   handleClick: function(){
+    console.log('text', this.state.text)
     this.setState(
       {todos: this.state.todos.concat(this.state.text)}
     );
@@ -29,6 +53,7 @@ var TodoApp = React.createClass({
       todoLists: this.state.todoLists.concat([this.state.todos]),
       index: this.state.index += 1
     });
+    React.render(<div>{this.state.todoLists}</div>, document.getElementById('test'))
     console.log(this.state.todoLists);
     console.log(this.state.index);
   },
