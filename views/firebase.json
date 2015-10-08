@@ -1,0 +1,9 @@
+{
+  "firebase": "dibbleapp",
+  "public": ".",
+  "ignore": [
+    "firebase.json",
+    "**/.*",
+    "**/node_modules/**"
+  ]
+}

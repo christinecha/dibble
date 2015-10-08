@@ -1,0 +1,12 @@
+* {
+  font-family: 'Montserrat', sans-serif;
+}
+
+p {
+  font-family: 'Roboto', sans-serif;
+}
+
+.dropzone {
+  height: 30px;
+  background-color: #eee;
+}
