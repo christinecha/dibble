@@ -127,11 +127,11 @@ function loadGroups(){
     loadAssignments();
   };
 
-  if ($('#groups').children('.group').length == 0){
-    $('#noGroups').show();
-  } else {
-    $('#noGroups').hide();
-  };
+  // if ($('#groups').children('group').length == 0){
+  //   $('#noGroups').show();
+  // } else {
+  //   $('#noGroups').hide();
+  // };
 };
 
 $('#groups').on("click", ".group", function(){

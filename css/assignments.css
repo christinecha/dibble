@@ -20,6 +20,7 @@ input, textarea {
   font-size: 11px;
   text-align: center;
 }
+
 .assignment {
   padding: 20px;
   background-color: #fafafa;
@@ -51,8 +52,6 @@ p.complete { color: #b3b3b3; }
 
 .buttoncomplete, .buttonincomplete { background-color: #7aa6b2; }
 .buttondelete { background-color: #f7931e;}
-
-#groups { margin-bottom: 30px; }
 .group {
   width: 100%;
   background-color: #b4d9d7;
