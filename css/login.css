@@ -1,7 +1,18 @@
+#login { text-align: center; margin-top: 50px; }
+
 input {
   margin-bottom: 5px;
   width: 100%;
   border: 3px solid #eee;
+}
+
+.loginError {
+  font-size: 11px;
+  text-transform: uppercase;
+  margin-top: 5px;
+  background-color: #fafafa;
+  padding: 5px;
+  display: none;
 }
 
 #userLogin, #userSignUp {
@@ -11,8 +22,8 @@ input {
   border-radius: 5px;
 }
 
-#login { text-align: center; margin-top: 50px; }
+
 
 @media screen and (min-width: 480px) {
-  #userLogin, #userSignUp, input { width: 380px; }
+  #login { width: 380px; }
 }
