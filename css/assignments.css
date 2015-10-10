@@ -1,4 +1,4 @@
-#assignmentForm {
+#assignmentForm, #groupForm {
   background-color: #b4d9d7;
   padding: 20px;
   margin-bottom: 5px;
@@ -7,16 +7,10 @@
 
 input, textarea {
   border: none;
-  border-radius: 5px;
   width: 100%;
-  margin-bottom: 5px;
-  font-family: 'Roboto', sans-serif;
-  font-size: 13px;
-  font-weight: normal;
-  padding: 5px 10px;
 }
 
-#assignmentFormSubmit { background-color: #7aa6b2; }
+#assignmentFormSubmit, #groupFormSubmit { background-color: #7aa6b2; }
 
 .assignment {
   padding: 20px;
@@ -24,20 +18,22 @@ input, textarea {
   margin-bottom: 5px;
 }
 
-.buttoncomplete, .buttonincomplete, .buttondelete, #assignmentFormSubmit, #commentFormSubmit {
+.buttoncomplete, .buttonincomplete, .buttondelete, #assignmentFormSubmit, #commentFormSubmit, #groupFormSubmit {
   width: 100%;
   padding: 10px 20px;
   margin-bottom: 5px;
   border-radius: 5px;
 }
 
+.buttoncomplete, .buttonincomplete, .buttondelete { display: none; }
+
 div.complete { background-color: #e6e6e6; }
 h3.complete { color: #808080; }
 p.complete { color: #b3b3b3; }
-.addAssignment { padding-top: 25px; cursor: pointer; }
-.addAssignment:hover { color: #f7931e; }
+.addAssignment, .addGroup { padding-top: 5px; cursor: pointer; }
+.addAssignment:hover, .addGroup:hover { color: #f7931e; }
 
-.comments { margin-top: 25px; }
+.comments { margin-top: 25px; display: none; margin-bottom: 10px; }
 .comments h6 { margin-bottom: 8px; }
 .comment { background-color: white; padding: 10px; border-radius: 5px; }
 .commentauthor { color: #999999; font-weight: normal; font-size: 11px; text-transform: uppercase;}
@@ -47,3 +43,18 @@ p.complete { color: #b3b3b3; }
 
 .buttoncomplete, .buttonincomplete { background-color: #7aa6b2; }
 .buttondelete { background-color: #f7931e;}
+
+#groups { margin-bottom: 30px; }
+.group {
+  width: 100%;
+  background-color: #b4d9d7;
+  color: white;
+  padding: 10px 20px;
+  cursor: pointer;
+  margin-bottom: 5px;
+}
+.group:hover { background-color: #7aa6b2; }
+.currentGroup { background-color: #7aa6b2; }
+.currentGroupIndicator { width: 14px; margin-left: -33px; margin-right: 19px; }
+.editGroup { float: right; background-color: transparent; }
+.editGroup:hover { text-decoration: underline; }

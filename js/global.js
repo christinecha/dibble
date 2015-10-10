@@ -51,6 +51,11 @@ $('#userLogin').on('click', function(){
   });
 });
 
+// Log out
+$('#header').on('click', '.logout', function(){
+  ref.unauth();
+});
+
 // Create a callback which logs the current auth state
 function authDataCallback(authData) {
   if (authData) {
@@ -84,27 +89,70 @@ function getName(authData) {
   }
 };
 
-// DISPLAY USER'S GROUPS + SET CURRENTGROUP ------------------------------------------
+// DISPLAY, EDIT, AND DEFINE USER'S GROUPS ------------------------------------------
 var usersGroupsRef = usersRef.child(currentUser.uid).child('groups');
 
-usersGroupsRef.on("value", function(snapshot) {
-  snapshot.forEach(function(childSnapshot) {
-    var group = childSnapshot.key();
-    displayGroups(group);
-  });
-});
+loadGroups();
+function loadGroups(){
+  $('#groups').children('.group').remove();
 
-function displayGroups (group){
-  var $group = $('<a>').text(group).addClass('.group').val(group);
-  $('#groups').append($group).append('<br>');
-  currentGroup = group;
+  usersGroupsRef.on("value", function(snapshot) {
+    //get every available group
+    snapshot.forEach(function(childSnapshot) {
+      var group = childSnapshot.key();
+      groupsRef.child(group).on("value", function(groupSnapshot){
+        displayGroups(groupSnapshot.key(), groupSnapshot.val().name);
+      });
+    });
+  });
+
+  function displayGroups (groupId, groupName){
+    $('.currentGroupIndicator').remove();
+    $('.group').removeClass('currentGroup');
+    var $editGroupButton = $('<button>').text('edit').addClass('editGroup');
+    var $currentGroupIndicator = $('<img>').attr('src', 'assets/triangle-left-blue.png').addClass('currentGroupIndicator');
+    var $group = $('<div>').text(groupName).addClass('group').addClass('currentGroup').val(groupId).append($editGroupButton);
+    $group = $group.prepend($currentGroupIndicator);
+    $('#groups').append($group);
+    currentGroup = groupId;
+    loadAssignments();
+  };
 };
 
-$('#groups').on("click", "a", function(){
+$('#groups').on("click", ".group", function(){
+  $('.currentGroupIndicator').remove();
+  $('.group').removeClass('currentGroup');
+  var $currentGroupIndicator = $('<img>').attr('src', 'assets/triangle-left-blue.png').addClass('currentGroupIndicator');
+  $(this).prepend($currentGroupIndicator);
+  $(this).addClass('currentGroup');
   currentGroup = $(this).val();
-  console.log('currentGroup is now ' + currentGroup);
+  $('.menu').hide();
   loadAssignments();
 });
+
+$('.addGroup').on('click', function(){
+  $('#groupForm').toggle();
+});
+
+$('#groupFormSubmit').on('click', function(){
+  var user = currentUser.uid;
+  var newGroupName = $('#groupTitleInput').val();
+  //create Group
+  var newGroupRef = groupsRef.push({
+    name: newGroupName
+  });
+  var newGroupId = newGroupRef.key();
+  //add currentUser to Group Members
+  groupsRef.child(newGroupId).child('members').child(user).set(true);
+  //add Group to Member's Info
+  usersRef.child(user).child('groups').child(newGroupId).set(true);
+  $('#groupTitleInput').val('');
+  $('#groupPartnerInput').val('');
+  $('#groupForm').hide();
+  loadGroups();
+});
+
+
 
 
 // DISPLAY CURRENT GROUP'S ASSIGNMENTS -------------------------------------
@@ -156,10 +204,16 @@ function loadAssignments(){
     $comments = $comments.append($commentForm);
 
     //put it all together now!
-    var $assignment = $('<div>').addClass('assignment').attr('id', key).addClass(status).append($title).append($description).append($comments).append('<br>').append($buttonComplete).append($buttonDelete);
+    var $assignment = $('<div>').addClass('assignment').attr('id', key).addClass(status).append($title).append($description).append($comments).append($buttonComplete).append($buttonDelete);
     $('#assignments').append($assignment);
   };
 };
+
+//expand assignment
+$('#assignments').on('click', '.assignment', function(){
+  $(this).children('.comments').toggle();
+  $(this).children('button').toggle();
+});
 
 // mark assignment as complete
 $('#assignments').on('click', '.buttoncomplete', function(){

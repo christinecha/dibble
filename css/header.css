@@ -6,6 +6,7 @@
   margin-top: 15px;
   width: 40px;
   height: 40px;
+  cursor: pointer;
 }
 
 .hamburger-bar {
@@ -32,7 +33,11 @@
 .view-toggle-3:hover { background-image: url('../assets/view_toggle_icon-06.png'); }
 
 .menu {
+  display: none;
   background-color: #b4d9d7;
-  padding: 20px;
+  margin-top: 2px;
+  margin-bottom: 20px;
+  color: white;
+  cursor: pointer;
 }
-.menu-option
+.menu-option { margin: 2px 0; padding: 20px; }
