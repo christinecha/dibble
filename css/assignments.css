@@ -1,0 +1,49 @@
+#assignmentForm {
+  background-color: #b4d9d7;
+  padding: 20px;
+  margin-bottom: 5px;
+  display: none;
+}
+
+input, textarea {
+  border: none;
+  border-radius: 5px;
+  width: 100%;
+  margin-bottom: 5px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 13px;
+  font-weight: normal;
+  padding: 5px 10px;
+}
+
+#assignmentFormSubmit { background-color: #7aa6b2; }
+
+.assignment {
+  padding: 20px;
+  background-color: #fafafa;
+  margin-bottom: 5px;
+}
+
+.buttoncomplete, .buttonincomplete, .buttondelete, #assignmentFormSubmit, #commentFormSubmit {
+  width: 100%;
+  padding: 10px 20px;
+  margin-bottom: 5px;
+  border-radius: 5px;
+}
+
+div.complete { background-color: #e6e6e6; }
+h3.complete { color: #808080; }
+p.complete { color: #b3b3b3; }
+.addAssignment { padding-top: 25px; cursor: pointer; }
+.addAssignment:hover { color: #f7931e; }
+
+.comments { margin-top: 25px; }
+.comments h6 { margin-bottom: 8px; }
+.comment { background-color: white; padding: 10px; border-radius: 5px; }
+.commentauthor { color: #999999; font-weight: normal; font-size: 11px; text-transform: uppercase;}
+#commentFormInput { width: 70%; margin-right: 5%; padding: 10px 20px;}
+#commentFormSubmit { width: 25%; text-align: center; font-size: 13px; font-family: 'Roboto', sans-serif; font-weight: bold; }
+#commentFormSubmit:hover { background-color: #b4d9d7; }
+
+.buttoncomplete, .buttonincomplete { background-color: #7aa6b2; }
+.buttondelete { background-color: #f7931e;}
