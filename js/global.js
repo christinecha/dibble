@@ -28,6 +28,17 @@ $('#userSignUp').on('click', function(){
       console.log("Error creating user:", error);
     } else {
       console.log("Successfully created user account with uid:", userData.uid);
+      ref.authWithPassword({
+        "email"    : email,
+        "password" : password
+      }, function(error, authData) {
+        if (error) {
+          console.log("Login Failed!", error);
+        } else {
+          console.log("Authenticated successfully with payload:", authData);
+          location.href = "index.html";
+        }
+      });
     }
   });
 
