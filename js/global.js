@@ -126,6 +126,12 @@ function loadGroups(){
     currentGroup = groupId;
     loadAssignments();
   };
+
+  if ($('#groups').children('.group').length == 0){
+    $('#noGroups').show();
+  } else {
+    $('#noGroups').hide();
+  };
 };
 
 $('#groups').on("click", ".group", function(){
@@ -215,6 +221,12 @@ function loadAssignments(){
     //put it all together now!
     var $assignment = $('<div>').addClass('assignment').attr('id', key).addClass(status).append($title).append($description).append($comments).append($buttonComplete).append($buttonDelete);
     $('#assignments').append($assignment);
+  };
+
+  if ($('#assignments').children('.assignment').length == 0){
+    $('#noAssignments').show();
+  } else {
+    $('#noAssignments').hide();
   };
 };
 
