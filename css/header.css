@@ -1,5 +1,6 @@
 .nav {
   background-color: #b4d9d7;
+  padding: 0 20px;
 }
 
 .hamburger {
@@ -33,6 +34,7 @@
 .view-toggle-3:hover { background-image: url('../assets/view_toggle_icon-06.png'); }
 
 .menu {
+  padding: 0 20px;
   display: none;
   background-color: #b4d9d7;
   margin-top: 2px;
@@ -40,4 +42,4 @@
   color: white;
   cursor: pointer;
 }
-.menu-option { margin: 2px 0; padding: 20px; }
+.menu-option { margin: 2px 0; padding: 10px 20px; }

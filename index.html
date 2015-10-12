@@ -6,6 +6,7 @@
     <!-- STYLES -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css" rel="stylesheet" type="text/css">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
     <link href="css/global.css" rel="stylesheet" type="text/css">
     <link href="css/header.css" rel="stylesheet" type="text/css">
     <link href="css/assignments.css" rel="stylesheet" type="text/css">
@@ -14,8 +15,6 @@
     <script src="js/dropzone.js"></script>
     <!-- Firebase JS -->
     <script src="https://cdn.firebase.com/js/client/2.3.1/firebase.js"></script>
-    <!-- Amazon S3 SDK -->
-    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.2.9.min.js"></script>
     <title>dibble</title>
 
   </head>
@@ -30,7 +29,7 @@
           <div class='col-sm-7'>
             <div class='row'>
               <div class='col-xs-6'>
-                <h2>ACTIVITY</h2>
+                <h2 class='groupTitle'>ACTIVITY</h2>
               </div>
               <div class='col-xs-6 text-right'>
                 <h5 class='addAssignment'>+ ADD ASSIGNMENT</h5>
@@ -39,7 +38,7 @@
             <div id='assignmentForm'>
               <input type='text' id='assignmentTitleInput' placeholder="Title of Assignment"><br>
               <textarea id='assignmentDescriptionInput'></textarea><br>
-              <button id='assignmentFormSubmit'>ADD ASSIGNMENT</button>
+              <button id='assignmentFormSubmit' class='new'>ADD ASSIGNMENT</button>
             </div>
             <div id='assignments'>
             </div>
@@ -48,6 +47,14 @@
             </div>
           </div>
           <div class='col-sm-5'>
+            <div id='groupInfo'>
+              <h3>Group Members</h3>
+              <br>
+              <div class='groupMembers'>
+              </div>
+            </div>
+            <br>
+            <br>
             <div class='row'>
               <div class='col-xs-8'>
                 <h2>GROUPS</h2>

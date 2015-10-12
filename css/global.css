@@ -4,12 +4,13 @@
 
 h1, h2, h5 { color: #7aa6b2; }
 
-h2,h3,h4 { margin-top: 0; }
+h2, h3, h4 { margin-top: 0; margin-bottom: 0; }
 h3 { margin-top: 0; font-size: 18px; }
 
 p {
   font-family: 'Roboto', sans-serif;
   font-size: 13px;
+  margin-bottom: 0;
 }
 
 button {
@@ -27,7 +28,7 @@ input, textarea {
   padding: 5px 10px;
 }
 
-#home, #login { margin-top: 20px; }
+#home, #login { margin-top: 30px; padding: 0 20px; }
 
 .dropzone {
   height: 30px;

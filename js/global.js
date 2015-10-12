@@ -1,8 +1,11 @@
 //Global Variables
 var ref = new Firebase('https://dibbleapp.firebaseio.com/');
 var currentUser = {};
+var currentUserId;
+var currentUserObj = {};
 var currentAssignments = {};
 var currentGroup;
+var currentGroupName;
 var assignmentsRef = ref.child('assignments');
 var usersRef = ref.child('users');
 var groupsRef = ref.child('groups');
@@ -17,6 +20,8 @@ $('#header').on('click', '.logout', function(){
 //Sign Up With Email
 $('#userSignUp').on('click', function(){
   var usersRef = ref.child('users');
+  var firstname = $('#firstname').val();
+  var lastname = $('#lastname').val();
   var email = $('#email').val();
   var password = $('#password').val();
 
@@ -29,6 +34,11 @@ $('#userSignUp').on('click', function(){
       $('.loginError').text(error);
     } else {
       console.log("Successfully created user account with uid:", userData.uid);
+      ref.child("users").child(userData.uid).update({
+        firstname: firstname,
+        lastname: lastname,
+        email: email,
+      });
       ref.authWithPassword({
         "email"    : email,
         "password" : password
@@ -70,9 +80,19 @@ function authDataCallback(authData) {
   if (authData) {
     console.log("User " + authData.uid + " is logged in with " + authData.provider);
     currentUser = authData;
+    currentUserId = authData.uid;
+    // DISPLAY CURRENT USER'S DETAILS -------------------------------------
+    var currentUserRef = usersRef.child(currentUserId);
+    currentUserRef.on("value", function(snapshot) {
+      currentUserObj = snapshot.val();
+    });
   } else {
     console.log("User is logged out");
     currentUser = {};
+    currentUserId = '';
+    currentUserObj = {};
+    currentGroup = '';
+    currentGroupName = '';
   }
 }
 // Register the callback to be fired every time auth state changes
@@ -90,6 +110,8 @@ ref.onAuth(function(authData) {
     });
   }
 });
+
+
 // find a suitable name based on the meta info given by each provider
 function getName(authData) {
   switch(authData.provider) {
@@ -104,26 +126,27 @@ var usersGroupsRef = usersRef.child(currentUser.uid).child('groups');
 loadGroups();
 function loadGroups(){
   $('#groups').children('.group').remove();
-
   usersGroupsRef.on("value", function(snapshot) {
     //get every available group
     snapshot.forEach(function(childSnapshot) {
       var group = childSnapshot.key();
       groupsRef.child(group).on("value", function(groupSnapshot){
-        displayGroups(groupSnapshot.key(), groupSnapshot.val().name);
+        displayGroups(groupSnapshot.key(), groupSnapshot.val().name, groupSnapshot.val().members);
       });
     });
   });
 
-  function displayGroups (groupId, groupName){
+  function displayGroups (groupId, groupName, groupMembers){
     $('.currentGroupIndicator').remove();
     $('.group').removeClass('currentGroup');
     var $editGroupButton = $('<button>').text('edit').addClass('editGroup');
     var $currentGroupIndicator = $('<img>').attr('src', 'assets/triangle-left-blue.png').addClass('currentGroupIndicator');
-    var $group = $('<div>').text(groupName).addClass('group').addClass('currentGroup').val(groupId).append($editGroupButton);
+    var $group = $('<div>').text(groupName).addClass('group').addClass('currentGroup').val(groupId).attr('data-name', groupName).append($editGroupButton);
     $group = $group.prepend($currentGroupIndicator);
     $('#groups').append($group);
     currentGroup = groupId;
+    $('.groupTitle').html(groupName);
+
     loadAssignments();
   };
 
@@ -134,6 +157,8 @@ function loadGroups(){
   // };
 };
 
+
+
 $('#groups').on("click", ".group", function(){
   $('.currentGroupIndicator').remove();
   $('.group').removeClass('currentGroup');
@@ -141,6 +166,17 @@ $('#groups').on("click", ".group", function(){
   $(this).prepend($currentGroupIndicator);
   $(this).addClass('currentGroup');
   currentGroup = $(this).val();
+  currentGroupName = $(this).attr('data-name');
+  groupsRef.child(currentGroup).child('members').on('value', function(snapshot) {
+    $('.groupMembers').children('p').remove();
+    snapshot.forEach(function(memberSnapshot) {
+      var member = memberSnapshot.key();
+      usersRef.child(member).on('value', function(snapshot) {
+        $('.groupMembers').append('<p>' + snapshot.val().firstname + ' ' + snapshot.val().lastname + '</p>');
+      });
+    });
+  });
+  $('.groupTitle').html(currentGroupName);
   $('.menu').hide();
   loadAssignments();
 });
@@ -152,12 +188,23 @@ $('.addGroup').on('click', function(){
 $('#groupFormSubmit').on('click', function(){
   var user = currentUser.uid;
   var newGroupName = $('#groupTitleInput').val();
-  //create Group
+  var newGroupPartner = $('#groupPartnerInput').val();
+  var newGroupPartnerId;
+  console.log(newGroupPartner);
+
+  // create Group
   var newGroupRef = groupsRef.push({
-    name: newGroupName
+    name: newGroupName,
   });
   var newGroupId = newGroupRef.key();
-  //add currentUser to Group Members
+  usersRef.orderByChild("email").equalTo(newGroupPartner).on('value', function(snapshot) {
+    snapshot.forEach(function(userSnapshot) {
+      newGroupPartnerId = userSnapshot.key();
+      groupsRef.child(newGroupId).child('members').child(newGroupPartnerId).set(true);
+      usersRef.child(newGroupPartnerId).child('groups').child(newGroupId).set(true);
+    });
+  });
+  // add currentUser + Invitee to Group Members
   groupsRef.child(newGroupId).child('members').child(user).set(true);
   //add Group to Member's Info
   usersRef.child(user).child('groups').child(newGroupId).set(true);
@@ -166,8 +213,6 @@ $('#groupFormSubmit').on('click', function(){
   $('#groupForm').hide();
   loadGroups();
 });
-
-
 
 
 // DISPLAY CURRENT GROUP'S ASSIGNMENTS -------------------------------------
@@ -188,29 +233,54 @@ function loadAssignments(){
           //iterate over each comment
           commentSnapshot.forEach(function(commentChildSnapshot) {
             var comment = commentChildSnapshot.val();
-            comments.push(comment);
+            var commentKey = commentChildSnapshot.key();
+            comments.push({commentKey: commentKey, comment: comment});
           });
         });
-        displayAssignment(childSnapshot.key(), assignment.title, assignment.description, assignment.complete, comments);
+
+        //get  files for specified assignment
+        var filesRef = assignmentsRef.child(childSnapshot.key()).child('files');
+        var files = [];
+        filesRef.on("value", function(fileSnapshot) {
+          //iterate over each file
+          fileSnapshot.forEach(function(fileChildSnapshot) {
+            var file = fileChildSnapshot.val();
+            var fileKey = fileChildSnapshot.key();
+            files.push({fileKey: fileKey, file: file});
+          });
+        });
+
+        displayAssignment(childSnapshot.key(), assignment.title, assignment.description, assignment.complete, comments, files);
       };
     });
   });
 
-  function displayAssignment (key, title, description, complete, comments) {
+  function displayAssignment (key, title, description, complete, comments, files) {
     var status;
     var statusOpposite;
     complete == true ? status = 'complete' : status = 'incomplete';
     complete == true ? statusOpposite = 'incomplete' : statusOpposite = 'complete';
-    var $title = $('<h3>').text(title).addClass(status);
-    var $description = $('<p>').text(description).addClass(status);
+    var $title = $('<h3>').text(title).addClass(status).addClass('assignmentTitle');
+    var $description = $('<p>').text(description).addClass('assignmentDescription').addClass(status);
+    var $info = $('<div>').addClass('assignmentInfo').append($title).append('<i class="fa fa-pencil-square-o editIcon"></i>').append($description);
     var $buttonComplete = $('<button>').text('MARK AS ' + statusOpposite).addClass('button' + statusOpposite);
     var $buttonDelete = $('<button>').text('DELETE ASSIGNMENT').addClass('buttonDelete');
+
+    //render files
+    var $files = $('<div>').addClass('files').html('<h6>ATTACHMENTS</h6>');
+    for (var i = 0; i < files.length; i++){
+      var $filename = $('<p>').html('<a class="fileLink" target="_blank" href=' + files[i].file.filepath + '>' + files[i].file.filename + '<i class="fa fa-arrow-circle-o-down downloadIcon"></i></a><i class="fa fa-times-circle deleteIcon"></i>');
+      var $file = $('<div>').addClass('file').attr('id', files[i].fileKey).append($filename).attr('target', 'blank');
+      $files.append($file);
+    };
+    var $fileFormInput = $('<input>').attr('type', 'file').attr('id', 'fileFormInput');
+    var $fileForm = $('<div>').addClass('fileForm').append($fileFormInput);
+    $files = $files.append($fileForm);
 
     //render comments
     var $comments = $('<div>').addClass('comments').html('<h6>COMMENTS & FEEDBACK</h6>');
     for (var i = 0; i < comments.length; i++){
-      var $comment = $('<p>').addClass('comment').html(comments[i].comment + '<br><span class="commentauthor">added by ' + comments[i].user + '</span>');
-      console.log(comments[i].comment);
+      var $comment = $('<p>').addClass('comment').attr('id', comments[i].commentKey).html(comments[i].comment.comment + '&nbsp&nbsp&nbsp<i class="fa fa-times-circle deleteIcon"></i><br><span class="commentauthor">added by ' + comments[i].comment.commentAuthor + '</span>');
       $comments.append($comment);
     };
     var $commentFormInput = $('<input>').attr('type', 'text').attr('placeholder','Say something...').attr('id', 'commentFormInput');
@@ -219,9 +289,11 @@ function loadAssignments(){
     $comments = $comments.append($commentForm);
 
     //put it all together now!
-    var $assignment = $('<div>').addClass('assignment').attr('id', key).addClass(status).append($title).append($description).append($comments).append($buttonComplete).append($buttonDelete);
+    var $assignment = $('<div>').addClass('assignment').attr('id', key).addClass(status).append($info).append($files).append($comments).append($buttonComplete).append($buttonDelete);
     $('#assignments').append($assignment);
   };
+
+  $('#assignments .assignment').first().children().show();
 
   if ($('#assignments').children('.assignment').length == 0){
     $('#noAssignments').show();
@@ -231,9 +303,13 @@ function loadAssignments(){
 };
 
 //expand assignment
-$('#assignments').on('click', '.assignment', function(){
-  $(this).children('.comments').toggle();
-  $(this).children('button').toggle();
+$('#assignments').on('click', '.assignmentInfo', function(){
+  if ($(this).hasClass('forceShow') == true) {
+  } else {
+    $(this).parent().children('.comments').toggle();
+    $(this).parent().children('.files').toggle();
+    $(this).parent().children('button').toggle();
+  };
 });
 
 // mark assignment as complete
@@ -265,30 +341,98 @@ $('.addAssignment').on('click', function(){
   $('#assignmentForm').toggle();
 });
 
-$('#assignmentFormSubmit').on('click', function(){
-  assignmentsRef.push({
-    title: $('#assignmentTitleInput').val(),
-    description: $('#assignmentDescriptionInput').val(),
-    group: currentGroup,
-    complete: false
-  });
+$('#home').on('click', '#assignmentFormSubmit', function(){
+  var assignmentTitle;
+  var assignmentDescription = $(this).siblings('#assignmentDescriptionInput').val();
+  if ($(this).siblings('#assignmentTitleInput').val() == '') {
+    assignmentTitle = 'Untitled';
+  } else {
+    assignmentTitle = $(this).siblings('#assignmentTitleInput').val();
+  };
+  if ($(this).hasClass('editing') == true) {
+    var assignmentKey = $(this).parent().parent('.assignment').attr('id');
+    assignmentsRef.child(assignmentKey).update({
+      title: assignmentTitle,
+      description: assignmentDescription,
+    });
+  } else if ($(this).hasClass('new') == true) {
+    assignmentsRef.push({
+      title: assignmentTitle,
+      description: assignmentDescription,
+      group: currentGroup,
+      complete: false
+    });
+  };
   $('#assignmentTitleInput').val('');
   $('#assignmentDescriptionInput').val('');
   $('#assignmentForm').hide();
   loadAssignments();
 });
 
+// edit assignment
+$('#assignments').on('click', '.editIcon', function(){
+  console.log('clicked');
+  $(this).parent().addClass('forceShow');
+  $(this).parent().parent('.assignment').show();
+  var currentAssignmentTitle = $(this).siblings('.assignmentTitle').text();
+  var currentAssignmentDescription = $(this).siblings('.assignmentDescription').text();
+  $(this).siblings('.assignmentTitle').replaceWith('<input type="text" id="assignmentTitleInput" value="' + currentAssignmentTitle + '">');
+  $(this).siblings('.assignmentDescription').replaceWith('<textarea type="text" id="assignmentDescriptionInput">' + currentAssignmentDescription + '</textarea>');
+  $(this).parent('.assignmentInfo').append('<button id="assignmentFormSubmit" class="editing">UPDATE</button>');
+});
+
 // add comment
 $('#assignments').on('click', '#commentFormSubmit', function(){
   var assignmentKey = $(this).parent().parent().parent('.assignment').attr('id');
-  console.log($(this).attr('id'));
   var commentsRef = assignmentsRef.child(assignmentKey).child('comments');
   commentsRef.push({
-    comment: $('#commentFormInput').val(),
-    user: currentUser.uid
+    comment: $(this).siblings('#commentFormInput').val(),
+    commentAuthor: currentUserObj.firstname,
+    commentAuthorId: currentUserId
   });
   $('#commentFormInput').val('');
   loadAssignments();
 });
 
-//delete comment
+// delete comment
+$('#assignments').on('click', '.comments .deleteIcon', function(){
+  var assignmentKey = $(this).parent().parent().parent('.assignment').attr('id');
+  var commentKey = $(this).parent('.comment').attr('id');
+  assignmentsRef.child(assignmentKey).child('comments').child(commentKey).remove();
+  loadAssignments();
+});
+
+// add file
+$('#assignments').on('change', '#fileFormInput', function(){
+  var assignmentKey = $(this).parent().parent().parent('.assignment').attr('id');
+  var filesRef = assignmentsRef.child(assignmentKey).child('files');
+  var file = $(this)[0].files[0];
+  var filename = $(this).val();
+  filename = filename.replace('C:\\fakepath\\', '');
+  var reader = new FileReader();
+
+  reader.onloadend = function() {
+    filesRef.push({
+      filename: filename,
+      filepath: reader.result,
+    });
+    loadAssignments();
+  };
+
+  reader.readAsDataURL(file);
+});
+
+// delete file
+$('#assignments').on('click', '.files .deleteIcon', function(){
+  var assignmentKey = $(this).parent().parent().parent().parent('.assignment').attr('id');
+  var fileKey = $(this).parent().parent('.file').attr('id');
+  assignmentsRef.child(assignmentKey).child('files').child(fileKey).remove();
+  loadAssignments();
+});
+
+
+
+
+
+
+////////

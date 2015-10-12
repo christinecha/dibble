@@ -1,3 +1,5 @@
+.forceShow { display: visible; }
+
 #assignmentForm, #groupForm {
   background-color: #b4d9d7;
   padding: 20px;
@@ -10,6 +12,7 @@ input, textarea {
   width: 100%;
 }
 
+.assignmentInfo { cursor: pointer; }
 #assignmentFormSubmit, #groupFormSubmit { background-color: #7aa6b2; }
 
 #noAssignments, #noGroups {
@@ -27,7 +30,9 @@ input, textarea {
   margin-bottom: 5px;
 }
 
-.buttoncomplete, .buttonincomplete, .buttondelete, #assignmentFormSubmit, #commentFormSubmit, #groupFormSubmit {
+.assignmentDescription { white-space: pre-wrap; }
+
+.buttoncomplete, .buttonincomplete, .buttondelete, #assignmentFormSubmit, #commentFormSubmit, #groupFormSubmit, #fileFormSubmit {
   width: 100%;
   padding: 10px 20px;
   margin-bottom: 5px;
@@ -42,16 +47,28 @@ p.complete { color: #b3b3b3; }
 .addAssignment, .addGroup { padding-top: 5px; cursor: pointer; }
 .addAssignment:hover, .addGroup:hover { color: #f7931e; }
 
-.comments { margin-top: 25px; display: none; margin-bottom: 10px; }
+#fileFormInput { margin-left: -10px; }
+.comments, .files { margin-top: 25px; display: none; margin-bottom: 10px; }
 .comments h6 { margin-bottom: 8px; }
-.comment { background-color: white; padding: 10px; border-radius: 5px; }
+.comment, .file { background-color: white; padding: 10px; border-radius: 5px; margin-bottom: 10px; }
 .commentauthor { color: #999999; font-weight: normal; font-size: 11px; text-transform: uppercase;}
-#commentFormInput { width: 70%; margin-right: 5%; padding: 10px 20px;}
+#commentFormInput { width: 70%; margin-right: 5%; padding: 10px;}
 #commentFormSubmit { width: 25%; text-align: center; font-size: 13px; font-family: 'Roboto', sans-serif; font-weight: bold; }
 #commentFormSubmit:hover { background-color: #b4d9d7; }
 
+.fileLink { color: #888; font-family: 'Roboto', sans-serif; }
+.fileLink:hover { color: #7aa6b2; }
+
+.editIcon { margin-top: -20px; font-size: 18px; }
+.downloadIcon { margin-left: 5px; }
+.deleteIcon, .editIcon { float: right; color: #aaa; cursor: pointer; }
+.deleteIcon:hover, .editIcon:hover { color: #7aa6b2; }
+
 .buttoncomplete, .buttonincomplete { background-color: #7aa6b2; }
 .buttondelete { background-color: #f7931e;}
+
+#groupInfo { background-color: #fafafa; padding: 20px; }
+#groupInfo h3 { color: #aaa; }
 .group {
   width: 100%;
   background-color: #b4d9d7;
