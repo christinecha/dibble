@@ -178,7 +178,7 @@ function displayGroupInfo(groupId) {
     snapshot.forEach(function(memberSnapshot) {
       var member = memberSnapshot.key();
       usersRef.child(member).on('value', function(userSnapshot) {
-        $('.groupMembers').append('<p>' + userSnapshot.val().firstname + ' ' + userSnapshot.val().lastname + ' | <a href="mailto:' + userSnapshot.val().email + '">' + userSnapshot.val().email + ' </a></p>');
+        $('.groupMembers').append('<p><strong>' + userSnapshot.val().firstname + ' ' + userSnapshot.val().lastname + '</strong> | <a href="mailto:' + userSnapshot.val().email + '">email</a> | <a>skype</a><br>send/request payment (coming soon)<br>&nbsp</p>');
       });
     });
   });
