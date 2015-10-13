@@ -162,9 +162,15 @@ function displayGroups (groupId, groupName){
   // var $editGroupButton = $('<button>').text('edit').addClass('editGroup');
   var $group = $('<div>').text(groupName).addClass('group').val(groupId).attr('data-name', groupName);
   $('#groups').append($group);
+  if ($('#groups').children('.group').length == 0){
+    $('#noGroups').show();
+  } else {
+    $('#noGroups').hide();
+  };
+
 };
 
-function displayGroupInfo (groupId) {
+function displayGroupInfo(groupId) {
   //clear Group Info Box
   $('.groupMembers').children('p').remove();
   //for each Group Member Key
@@ -179,8 +185,9 @@ function displayGroupInfo (groupId) {
   loadAssignments();
 };
 
-
 $('#groups').on("click", ".group", function(){
+  $('.noActivity').hide();
+  $('.activity').show();
   $('.currentGroupIndicator').remove();
   $('.group').removeClass('currentGroup');
   var $currentGroupIndicator = $('<img>').attr('src', 'assets/triangle-right-blue.png').addClass('currentGroupIndicator');
@@ -190,7 +197,7 @@ $('#groups').on("click", ".group", function(){
   currentGroupName = $(this).attr('data-name');
   $('.groupTitle').html(currentGroupName);
   $('.menu').hide();
-  displayGroupInfo (currentGroup);
+  displayGroupInfo(currentGroup);
   loadAssignments();
 });
 
@@ -203,7 +210,6 @@ $('#groupFormSubmit').on('click', function(){
   var newGroupName = $('#groupTitleInput').val();
   var newGroupPartner = $('#groupPartnerInput').val();
   var newGroupPartnerId;
-
   // create Group
   var newGroupRef = groupsRef.push({
     name: newGroupName,
