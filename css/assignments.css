@@ -27,7 +27,6 @@ input, textarea {
 #assignmentFormSubmit, #groupFormSubmit { background-color: #7aa6b2; }
 
 #noAssignments, #noGroups {
-  display: none;
   background-color: #fafafa;
   padding: 20px;
   text-transform: uppercase;
