@@ -162,14 +162,7 @@ function displayGroups (groupId, groupName){
   // var $editGroupButton = $('<button>').text('edit').addClass('editGroup');
   var $group = $('<div>').text(groupName).addClass('group').val(groupId).attr('data-name', groupName);
   $('#groups').append($group);
-  currentGroup = groupId;
-  $('.groupTitle').html(groupName);
 };
-
-console.log("Now the current group is " + currentGroup);
-//for each group Member Id, search the UserRef for their info.
-//find the member name and email.
-//display members in Info div (name, name, email)
 
 function displayGroupInfo (groupId) {
   //clear Group Info Box
@@ -179,7 +172,7 @@ function displayGroupInfo (groupId) {
     snapshot.forEach(function(memberSnapshot) {
       var member = memberSnapshot.key();
       usersRef.child(member).on('value', function(userSnapshot) {
-        $('.groupMembers').append('<p>' + userSnapshot.val().firstname + ' ' + userSnapshot.val().lastname + ' ' + userSnapshot.val().email + '</p>');
+        $('.groupMembers').append('<p>' + userSnapshot.val().firstname + ' ' + userSnapshot.val().lastname + ' | <a href="mailto:' + userSnapshot.val().email + '">' + userSnapshot.val().email + ' </a></p>');
       });
     });
   });

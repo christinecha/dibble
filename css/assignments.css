@@ -9,7 +9,15 @@
   display: none;
 }
 
-.suggestedMaterial { height: 75px; border: 1px solid #f0f0f0; margin: 10px 0; text-align: center; padding: 20px; }
+.suggestedMaterial {
+  height: 75px;
+  background-color: #ffae6e;
+  margin: 10px 0;
+  text-align: center;
+  padding: 20px;
+  border-radius: 10px;
+  color: white;
+}
 
 input, textarea {
   border: none;
