@@ -140,33 +140,36 @@ function getName(authData) {
 
 // MANAGE GROUPS ------------------------------------------
 
-//on child_added, load all the groups of the current User.
-//use the Group Keys to find them in the Group Ref.
-//
-
-
-
 var usersGroupsRef = usersRef.child(currentUser.uid).child('groups');
 
-//get all groups of User
-usersGroupsRef.on("child_added", function(snapshot) {
-  //for each group, get groupId
-  var group = snapshot.key();
-  //now go to the Groups Ref to find each group's info
-  groupsRef.child(group).on("value", function(groupSnapshot){
-    displayGroups(groupSnapshot.key(), groupSnapshot.val().name);
-    // displayGroupInfo(groupSnapshot.key());
-  });
+//on child_added, load all the groups of the current User.
+usersGroupsRef.on("child_added", function (snapshot) {
+  var groupKey = snapshot.key();
+  findGroupInfo(groupKey);
 });
 
+//use the Group Keys to find them in the Group Ref.
+function findGroupInfo (groupKey) {
+  //for each Group Key, find the ID(key), name, and members' ids.
+  groupsRef.child(groupKey).on("value", function(snapshot){
+    var groupName = snapshot.val().name;
+    displayGroups(snapshot.key(), groupName);
+  });
+};
+
+//display groups in the Groups div (id, name, members)
 function displayGroups (groupId, groupName){
   // var $editGroupButton = $('<button>').text('edit').addClass('editGroup');
   var $group = $('<div>').text(groupName).addClass('group').val(groupId).attr('data-name', groupName);
   $('#groups').append($group);
   currentGroup = groupId;
   $('.groupTitle').html(groupName);
-  loadAssignments();
 };
+
+console.log("Now the current group is " + currentGroup);
+//for each group Member Id, search the UserRef for their info.
+//find the member name and email.
+//display members in Info div (name, name, email)
 
 function displayGroupInfo (groupId) {
   //clear Group Info Box
@@ -180,21 +183,15 @@ function displayGroupInfo (groupId) {
       });
     });
   });
+  loadAssignments();
 };
 
-  // if ($('#groups').children('group').length == 0){
-  //   $('#noGroups').show();
-  // } else {
-  //   $('#noGroups').hide();
-  // };
-// var $currentGroupIndicator = $('<img>').attr('src', 'assets/triangle-left-blue.png').addClass('currentGroupIndicator');
-// $('#groups .group').first().prepend($currentGroupIndicator).addClass('currentGroup');
 
 $('#groups').on("click", ".group", function(){
   $('.currentGroupIndicator').remove();
   $('.group').removeClass('currentGroup');
-  var $currentGroupIndicator = $('<img>').attr('src', 'assets/triangle-left-blue.png').addClass('currentGroupIndicator');
-  $(this).prepend($currentGroupIndicator);
+  var $currentGroupIndicator = $('<img>').attr('src', 'assets/triangle-right-blue.png').addClass('currentGroupIndicator');
+  $(this).append($currentGroupIndicator);
   $(this).addClass('currentGroup');
   currentGroup = $(this).val();
   currentGroupName = $(this).attr('data-name');

@@ -83,6 +83,6 @@ p.complete { color: #b3b3b3; }
 }
 .group:hover { background-color: #7aa6b2; }
 .currentGroup { background-color: #7aa6b2; }
-.currentGroupIndicator { width: 14px; margin-left: -33px; margin-right: 19px; }
+.currentGroupIndicator { width: 19px; margin-top: -2px; margin-right: -38px; float:right; }
 .editGroup { float: right; background-color: transparent; }
 .editGroup:hover { text-decoration: underline; }
