@@ -9,8 +9,6 @@ var currentGroupName;
 var assignmentsRef = ref.child('assignments');
 var usersRef = ref.child('users');
 var groupsRef = ref.child('groups');
-var usersGroupsRef = usersRef.child(currentUser.uid).child('groups');
-
 $('#header').load("_header.html");
 $('#header').on('click', '.logout', function(){
   ref.unauth();
@@ -142,10 +140,13 @@ function getName(authData) {
 
 // MANAGE GROUPS ------------------------------------------
 
+//on child_added, load all the groups of the current User.
+//use the Group Keys to find them in the Group Ref.
+//
 
 
 
-
+var usersGroupsRef = usersRef.child(currentUser.uid).child('groups');
 
 //get all groups of User
 usersGroupsRef.on("child_added", function(snapshot) {
@@ -284,7 +285,7 @@ function loadAssignments(){
     var $description = $('<p>').text(description).addClass('assignmentDescription').addClass(status);
     var $info = $('<div>').addClass('assignmentInfo').append($title).append('<i class="fa fa-pencil-square-o editIcon"></i>').append($description);
     var $buttonComplete = $('<button>').text('MARK AS ' + statusOpposite).addClass('button' + statusOpposite);
-    var $buttonDelete = $('<button>').text('DELETE ASSIGNMENT').addClass('buttonDelete');
+    var $buttonDelete = $('<button>').text('DELETE ASSIGNMENT').addClass('buttondelete');
 
     //render files
     var $files = $('<div>').addClass('files').html('<h6>ATTACHMENTS</h6>');
@@ -350,7 +351,7 @@ $('#assignments').on('click', '.buttonincomplete', function(){
 });
 
 // delete assignment
-$('#assignments').on('click', '.buttonDelete', function(){
+$('#assignments').on('click', '.buttondelete', function(){
   var assignmentKey = $(this).parent('.assignment').attr('id');
   assignmentsRef.child(assignmentKey).remove();
   loadAssignments();

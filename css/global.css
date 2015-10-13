@@ -29,7 +29,9 @@ input, textarea {
   padding: 5px 10px;
 }
 
-#home, #login { margin-top: 30px; padding: 0 20px; }
+#header { position: absolute; top: 0; z-index: 100; width: 100%; }
+
+#home, #login { padding: 0 20px; }
 
 .dropzone {
   height: 30px;

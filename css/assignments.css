@@ -1,5 +1,7 @@
 .forceShow { display: visible; }
 
+#home { margin-top: 80px; }
+
 #assignmentForm, #groupForm {
   background-color: #b4d9d7;
   padding: 20px;
