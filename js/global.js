@@ -9,13 +9,33 @@ var currentGroupName;
 var assignmentsRef = ref.child('assignments');
 var usersRef = ref.child('users');
 var groupsRef = ref.child('groups');
+var usersGroupsRef = usersRef.child(currentUser.uid).child('groups');
+
 $('#header').load("_header.html");
 $('#header').on('click', '.logout', function(){
   ref.unauth();
-  location.href = "login.html";
+  location.href = "index.html";
 });
 
 // USER AUTHENTICATION ------------------------------------------
+
+$('.alreadyUser').on('click', function(){
+  $('#userSignUp').hide();
+  $('#firstname').hide();
+  $('#lastname').hide()
+  $('#userLogin').show();
+  $(this).hide();
+  $('.notUserYet').show();
+});
+
+$('.notUserYet').on('click', function(){
+  $('#userSignUp').show();
+  $('#firstname').show();
+  $('#lastname').show()
+  $('#userLogin').hide();
+  $(this).hide();
+  $('.alreadyUser').show();
+});
 
 //Sign Up With Email
 $('#userSignUp').on('click', function(){
@@ -44,7 +64,7 @@ $('#userSignUp').on('click', function(){
         "password" : password
       }, function(error, authData) {
         console.log("Authenticated successfully with payload:", authData);
-        location.href = "index.html";
+        location.href = "account.html";
       });
     }
   });
@@ -65,7 +85,7 @@ $('#userLogin').on('click', function(){
       $('.loginError').text(error);
     } else {
       console.log("Authenticated successfully with payload:", authData);
-      location.href = "index.html";
+      location.href = "account.html";
     }
   });
 });
@@ -120,44 +140,54 @@ function getName(authData) {
   }
 };
 
-// DISPLAY, EDIT, AND DEFINE USER'S GROUPS ------------------------------------------
-var usersGroupsRef = usersRef.child(currentUser.uid).child('groups');
+// MANAGE GROUPS ------------------------------------------
 
-loadGroups();
-function loadGroups(){
-  $('#groups').children('.group').remove();
-  usersGroupsRef.on("value", function(snapshot) {
-    //get every available group
-    snapshot.forEach(function(childSnapshot) {
-      var group = childSnapshot.key();
-      groupsRef.child(group).on("value", function(groupSnapshot){
-        displayGroups(groupSnapshot.key(), groupSnapshot.val().name, groupSnapshot.val().members);
+
+
+
+
+
+//get all groups of User
+usersGroupsRef.on("child_added", function(snapshot) {
+  //for each group, get groupId
+  var group = snapshot.key();
+  //now go to the Groups Ref to find each group's info
+  groupsRef.child(group).on("value", function(groupSnapshot){
+    displayGroups(groupSnapshot.key(), groupSnapshot.val().name);
+    // displayGroupInfo(groupSnapshot.key());
+  });
+});
+
+function displayGroups (groupId, groupName){
+  // var $editGroupButton = $('<button>').text('edit').addClass('editGroup');
+  var $group = $('<div>').text(groupName).addClass('group').val(groupId).attr('data-name', groupName);
+  $('#groups').append($group);
+  currentGroup = groupId;
+  $('.groupTitle').html(groupName);
+  loadAssignments();
+};
+
+function displayGroupInfo (groupId) {
+  //clear Group Info Box
+  $('.groupMembers').children('p').remove();
+  //for each Group Member Key
+  groupsRef.child(groupId).child('members').on('value', function(snapshot) {
+    snapshot.forEach(function(memberSnapshot) {
+      var member = memberSnapshot.key();
+      usersRef.child(member).on('value', function(userSnapshot) {
+        $('.groupMembers').append('<p>' + userSnapshot.val().firstname + ' ' + userSnapshot.val().lastname + ' ' + userSnapshot.val().email + '</p>');
       });
     });
   });
-
-  function displayGroups (groupId, groupName, groupMembers){
-    $('.currentGroupIndicator').remove();
-    $('.group').removeClass('currentGroup');
-    var $editGroupButton = $('<button>').text('edit').addClass('editGroup');
-    var $currentGroupIndicator = $('<img>').attr('src', 'assets/triangle-left-blue.png').addClass('currentGroupIndicator');
-    var $group = $('<div>').text(groupName).addClass('group').addClass('currentGroup').val(groupId).attr('data-name', groupName).append($editGroupButton);
-    $group = $group.prepend($currentGroupIndicator);
-    $('#groups').append($group);
-    currentGroup = groupId;
-    $('.groupTitle').html(groupName);
-
-    loadAssignments();
-  };
+};
 
   // if ($('#groups').children('group').length == 0){
   //   $('#noGroups').show();
   // } else {
   //   $('#noGroups').hide();
   // };
-};
-
-
+// var $currentGroupIndicator = $('<img>').attr('src', 'assets/triangle-left-blue.png').addClass('currentGroupIndicator');
+// $('#groups .group').first().prepend($currentGroupIndicator).addClass('currentGroup');
 
 $('#groups').on("click", ".group", function(){
   $('.currentGroupIndicator').remove();
@@ -167,17 +197,9 @@ $('#groups').on("click", ".group", function(){
   $(this).addClass('currentGroup');
   currentGroup = $(this).val();
   currentGroupName = $(this).attr('data-name');
-  groupsRef.child(currentGroup).child('members').on('value', function(snapshot) {
-    $('.groupMembers').children('p').remove();
-    snapshot.forEach(function(memberSnapshot) {
-      var member = memberSnapshot.key();
-      usersRef.child(member).on('value', function(snapshot) {
-        $('.groupMembers').append('<p>' + snapshot.val().firstname + ' ' + snapshot.val().lastname + '</p>');
-      });
-    });
-  });
   $('.groupTitle').html(currentGroupName);
   $('.menu').hide();
+  displayGroupInfo (currentGroup);
   loadAssignments();
 });
 
@@ -190,7 +212,6 @@ $('#groupFormSubmit').on('click', function(){
   var newGroupName = $('#groupTitleInput').val();
   var newGroupPartner = $('#groupPartnerInput').val();
   var newGroupPartnerId;
-  console.log(newGroupPartner);
 
   // create Group
   var newGroupRef = groupsRef.push({
@@ -211,7 +232,6 @@ $('#groupFormSubmit').on('click', function(){
   $('#groupTitleInput').val('');
   $('#groupPartnerInput').val('');
   $('#groupForm').hide();
-  loadGroups();
 });
 
 

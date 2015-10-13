@@ -1,28 +1,52 @@
+#home-section-1 {
+  background-image: url('../assets/background-desk.jpeg');
+  background-size: cover;
+  height: 650px;
+  text-align: center;
+  padding-top: 50px;
+}
+
+.splash-logo { width: 300px; }
+
+#home-section-1 h6 { color: white; font-size: 20px; font-family: 'Montserrat', sans-serif; font-weight: normal; }
+
 #login { text-align: center; margin-top: 50px; }
 
 input {
   margin-bottom: 5px;
   width: 100%;
-  border: 3px solid #eee;
+  background-color: rgba(255,255,255,.5);
+  border: none;
+  padding: 10px 20px;
+  color: black;
 }
+
+::-webkit-input-placeholder { color:white; text-transform: uppercase; }
+::-moz-placeholder { color:#f00; } /* firefox 19+ */
+:-ms-input-placeholder { color:#f00; } /* ie */
+input:-moz-placeholder { color:#f00; }
 
 .loginError {
   font-size: 11px;
   text-transform: uppercase;
-  margin-top: 5px;
-  background-color: #fafafa;
+  margin-bottom: 5px;
+  color: white;
+  background-color: #f7931e;
   padding: 5px;
   display: none;
 }
 
 #userLogin, #userSignUp {
+  background-color: #b4d9d7;
   width: 100%;
   padding: 10px 20px;
   margin-bottom: 5px;
   border-radius: 5px;
+  font-size: 20px;
 }
 
-
+.alreadyUser, .notUserYet { color: white; }
+.alreadyUser a, .notUserYet a { color: white; cursor: pointer;}
 
 @media screen and (min-width: 480px) {
   #login { width: 380px; }

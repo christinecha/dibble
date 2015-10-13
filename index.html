@@ -1,88 +1,49 @@
 <!-- DOCTYPE HTML -->
 <html>
-  <head>
-    <!-- FONTS -->
-    <link href='https://fonts.googleapis.com/css?family=Montserrat|Roboto:400,300,700' rel='stylesheet' type='text/css'>
-    <!-- STYLES -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css" rel="stylesheet" type="text/css">
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-    <link href="css/global.css" rel="stylesheet" type="text/css">
-    <link href="css/header.css" rel="stylesheet" type="text/css">
-    <link href="css/assignments.css" rel="stylesheet" type="text/css">
-    <!-- JavaScript-->
-    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-    <script src="js/dropzone.js"></script>
-    <!-- Firebase JS -->
-    <script src="https://cdn.firebase.com/js/client/2.3.1/firebase.js"></script>
-    <title>dibble</title>
+<head>
+  <!-- FONTS -->
+  <link href='https://fonts.googleapis.com/css?family=Montserrat|Roboto:400,300,700' rel='stylesheet' type='text/css'>
+  <!-- STYLES -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css" rel="stylesheet" type="text/css">
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+  <link href="/css/global.css" rel="stylesheet" type="text/css">
+  <link href="/css/header.css" rel="stylesheet" type="text/css">
+  <link href="/css/login.css" rel="stylesheet" type="text/css">
+  <!-- JavaScript-->
+  <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+  <script src="js/dropzone.js"></script>
+  <!-- Firebase JS -->
+  <script src="https://cdn.firebase.com/js/client/2.3.1/firebase.js"></script>
+  <!-- Amazon S3 SDK -->
+  <script src="https://sdk.amazonaws.com/js/aws-sdk-2.2.9.min.js"></script>
+  <title>dibble</title>
 
-  </head>
+</head>
 
 
   <body>
-      <div id="header">
+    <div id="header">
+    </div>
+
+    <div id="home-section-1">
+      <img class="splash-logo" src="assets/dibbl-logo-02.png">
+      <h6>transforming one-on-one education</h6>
+
+      <div id="login" class="container-fluid">
+          <input type="text" id="firstname" placeholder="first name"><br>
+          <input type="text" id="lastname" placeholder="last name"><br>
+          <input type="email" id="email" placeholder="email"><br>
+          <input type="password" id="password" placeholder="password"><br>
+          <p class="loginError"></p>
+          <button id="userLogin" style="display:none;">Login</button>
+          <button id="userSignUp">Sign Up</button>
+          <p class="alreadyUser">Already a user? <a>Log in >></a></p>
+          <p class="notUserYet" style="display:none;">Not a user yet? <a>Sign up >></a></p>
       </div>
+    </div>
 
-      <div id="home">
-        <div>
-          <div class='col-sm-7'>
-            <div class='row'>
-              <div class='col-xs-6'>
-                <h2 class='groupTitle'>ACTIVITY</h2>
-              </div>
-              <div class='col-xs-6 text-right'>
-                <h5 class='addAssignment'>+ ADD ASSIGNMENT</h5>
-              </div>
-            </div>
-            <div id='assignmentForm'>
-              <input type='text' id='assignmentTitleInput' placeholder="Title of Assignment"><br>
-              <textarea id='assignmentDescriptionInput'></textarea><br>
-              <button id='assignmentFormSubmit' class='new'>ADD ASSIGNMENT</button>
-            </div>
-            <div id='assignments'>
-            </div>
-            <div id='noAssignments'>
-              no assignments yet
-            </div>
-          </div>
-          <div class='col-sm-5'>
-            <div id='groupInfo'>
-              <h3>Group Members</h3>
-              <br>
-              <div class='groupMembers'>
-              </div>
-            </div>
-            <br>
-            <br>
-            <div class='row'>
-              <div class='col-xs-8'>
-                <h2>GROUPS</h2>
-              </div>
-              <div class='col-xs-4 text-right'>
-                <h5 class='addGroup'>+ NEW</h5>
-              </div>
-            </div>
-            <div id='groupForm'>
-              <input type='text' id='groupTitleInput' placeholder="Your Group Name"><br>
-              <input type='text' id='groupPartnerInput' placeholder="Invite by Email"><br>
-              <button id='groupFormSubmit'>ADD GROUP</button>
-            </div>
-            <div id='groups'>
-            </div>
-            <div id='noGroups'>
-              no groups yet
-            </div>
-            <br>
-            <br>
-            <div id='quicklinks'>
-              <h2>QUICKLINKS</h2>
-            </div>
 
-          </div>
 
-        </div>
-      </div>
 
     <script type="text/javascript" src="js/global.js"></script>
     <script type="text/javascript" src="js/header.js"></script>

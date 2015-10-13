@@ -1,0 +1,95 @@
+<!-- DOCTYPE HTML -->
+<html>
+  <head>
+    <!-- FONTS -->
+    <link href='https://fonts.googleapis.com/css?family=Montserrat|Roboto:400,300,700' rel='stylesheet' type='text/css'>
+    <!-- STYLES -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css" rel="stylesheet" type="text/css">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link href="css/global.css" rel="stylesheet" type="text/css">
+    <link href="css/header.css" rel="stylesheet" type="text/css">
+    <link href="css/assignments.css" rel="stylesheet" type="text/css">
+    <!-- JavaScript-->
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="js/dropzone.js"></script>
+    <!-- Firebase JS -->
+    <script src="https://cdn.firebase.com/js/client/2.3.1/firebase.js"></script>
+    <title>dibble</title>
+
+  </head>
+
+
+  <body>
+      <div id="header">
+      </div>
+
+      <div id="home">
+        <div>
+          <div class='col-sm-7'>
+            <div class='row'>
+              <div class='col-xs-8'>
+                <h2 class='groupTitle'>ACTIVITY</h2>
+              </div>
+              <div class='col-xs-4 text-right'>
+                <h5 class='addAssignment'>+ ADD ASSIGNMENT</h5>
+              </div>
+            </div>
+            <div id='assignmentForm'>
+              <input type='text' id='assignmentTitleInput' placeholder="Title of Assignment"><br>
+              <textarea id='assignmentDescriptionInput'></textarea><br>
+              <button id='assignmentFormSubmit' class='new'>ADD ASSIGNMENT</button>
+            </div>
+            <div id='assignments'>
+            </div>
+            <div id='noAssignments'>
+              no assignments yet
+            </div>
+          </div>
+          <div class='col-sm-5'>
+            <div id='groupInfo'>
+              <h3>Group Members</h3>
+              <br>
+              <div class='groupMembers'>
+              </div>
+            </div>
+            <div class='suggestedMaterial'>
+              <p>< Related Material Carousel (Placeholder) ></p>
+              <p>ABC Class at Coursera.com</p>
+            </div>
+            <br>
+            <br>
+            <div class='row'>
+              <div class='col-xs-8'>
+                <h2>GROUPS</h2>
+              </div>
+              <div class='col-xs-4 text-right'>
+                <h5 class='addGroup'>+ NEW</h5>
+              </div>
+            </div>
+            <div id='groupForm'>
+              <input type='text' id='groupTitleInput' placeholder="Your Group Name"><br>
+              <input type='text' id='groupPartnerInput' placeholder="Invite by Email"><br>
+              <button id='groupFormSubmit'>ADD GROUP</button>
+            </div>
+            <div id='groups'>
+            </div>
+            <div id='noGroups'>
+              no groups yet
+            </div>
+            <br>
+            <br>
+            <div id='quicklinks'>
+              <h2>QUICKLINKS</h2>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+    <script type="text/javascript" src="js/global.js"></script>
+    <script type="text/javascript" src="js/header.js"></script>
+
+  </body>
+</html>
