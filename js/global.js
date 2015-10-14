@@ -251,13 +251,34 @@ function displayAssignment (key, title, description, complete) {
 //
 function displayGroupInfo(currentGroup) {
   //clear Group Info Box
-  $('.groupMembers').children('p').remove();
+  $('.groupMembers').children('div').remove();
   //for each Group Member Key
   groupsRef.child(currentGroup).child('members').on('child_added', function(snapshot){
     console.log(snapshot.key() + ' is a member of ' + currentGroup);
     var member = snapshot.key();
     usersRef.child(member).on('value', function(userSnapshot){
-      $('.groupMembers').append('<p><strong>' + userSnapshot.val().firstname + ' ' + userSnapshot.val().lastname + '</strong> | <a href="mailto:' + userSnapshot.val().email + '">email</a> | <a>skype</a><br>send/request payment (coming soon)<br>&nbsp</p>');
+      var $memberOptions = $('<div>').addClass('memberOptions').html('<a data-name="memberContact" class="member-expand">CONTACT</a> | <a class="member-expand" data-name="memberPay">PAY</a> | <a class="member-expand" data-name="memberCharge">CHARGE</a>');
+      var $memberName = $('<p>').html('<strong>' + userSnapshot.val().firstname + ' ' + userSnapshot.val().lastname + '</strong>').addClass('memberName').append($memberOptions);
+
+      var $memberEmail = $('<img>').attr('src', 'assets/contact-icon-03.png').addClass('contact-icon');
+      $memberEmail = $('<a>').attr('href', 'mailto:' + userSnapshot.val().email).append($memberEmail);
+      var $memberSkype = $('<img>').attr('src', 'assets/contact-icon-04.png').addClass('contact-icon');
+      $memberSkype = $('<a>').attr('href', 'mailto:' + userSnapshot.val().email).append($memberSkype);
+      var $memberContact = $('<div>').addClass('memberContact').append($memberEmail).append($memberSkype);
+
+      var $memberPay = $('<div>').addClass('memberPay');
+      var $memberCharge = $('<div>').addClass('memberCharge');
+      if (userSnapshot.val().venmo == null) {
+        $memberPay = $memberPay.append('<p>This user has not set up payment yet.</p>')
+        $memberCharge = $memberCharge.append('<p>This user has not set up payment yet.</p>')
+      } else {
+        $memberPay = $memberPay.append('<input type="number" min="0.01" step="0.01" value="0.00"> <button id="memberPaySubmit">PAY</button>');
+        $memberCharge = $memberCharge.append('<input type="number" min="0.01" step="0.01" value="0.00"> <button id="memberPaySubmit">CHARGE</button>');
+      };
+
+      var $memberInfo = $('<div>').addClass('memberInfo').append($memberName).append($memberContact).append($memberPay).append($memberCharge);
+
+      $('.groupMembers').append($memberInfo);
     });
   });
 };
@@ -312,6 +333,13 @@ $('#groupFormSubmit').on('click', function(){
 
 
 // ON USER EVENTS EDIT ACCOUNT INFO -------------------------------------
+
+//expand Member info
+$('.groupMembers').on('click', '.member-expand', function(){
+  var target = $(this).attr('data-name');
+  var targetClass = '.' + target;
+  $(this).parent().parent().parent().children(targetClass).toggle();
+});
 
 //expand assignment
 $('#assignments').on('click', '.assignmentInfo', function(){
@@ -468,6 +496,7 @@ $('#assignments').on('click', '.files .deleteIcon', function(){
 });
 
 
+// PAYMENTS ------------------------------------------------------
 
 
 

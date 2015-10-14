@@ -82,6 +82,16 @@ p.complete { color: #b3b3b3; }
 
 #groupInfo { background-color: #fafafa; padding: 20px; }
 #groupInfo h3 { color: #aaa; }
+.memberName { margin: 2px 0; padding: 10px; background-color: white; }
+.memberOptions { float: right; display: inline-block; color: #ccc; }
+.memberOptions a { font-size: 11px; color: #888; cursor: pointer; }
+.memberContact, .memberPay, .memberCharge { border: 2px solid white; padding: 10px; display: none; text-align: center; }
+.memberInfo input { width: 55%; padding: 10px 20px; }
+.memberInfo button { width: 40%; font-family: 'Roboto', sans-serif; font-size: 13px; font-weight: bold; }
+.memberInfo button:hover { background-color: #b4d9d7; }
+
+.contact-icon { background-color: #b4d9d7; border-radius: 3px; margin-right: 3px; }
+
 .group {
   width: 100%;
   background-color: #b4d9d7;
