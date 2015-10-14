@@ -41,7 +41,7 @@ input, textarea {
 }
 
 .assignmentDescription { white-space: pre-wrap; }
-.assignment input, .assignment button {
+.assignment input, button {
   width: 100%;
   padding: 10px 20px;
   margin-bottom: 5px;
