@@ -114,6 +114,11 @@ function authDataCallback(authData) {
     currentUserObj = {};
     currentGroup = '';
     currentGroupName = '';
+    if ( window.location.href.indexOf("index.html") > -1 ) {
+      //do nothing
+    } else {
+      location.href = "index.html";
+    };
   }
 }
 // Register the callback to be fired every time auth state changes
@@ -200,20 +205,26 @@ function displayAssignment (key, title, description, complete) {
   var $info = $('<div>').addClass('assignmentInfo').append($title).append('<i class="fa fa-pencil-square-o editIcon"></i>').append($description);
   var $buttonComplete = $('<button>').text('MARK AS ' + statusOpposite).addClass('button' + statusOpposite);
   var $buttonDelete = $('<button>').text('DELETE ASSIGNMENT').addClass('buttondelete');
-  var $files = $('<div>').addClass('files').html('<h6>ATTACHMENTS</h6>');
+  var $files = $('<div>').addClass('files').html('<h6>ATTACHMENTS & LINKS</h6>');
   var $comments = $('<div>').addClass('comments').html('<h6>COMMENTS & FEEDBACK</h6>');
 
  //render files
   ref.child('files').orderByChild('assignment').equalTo(key).on("value", function(fileSnapshot){
     fileSnapshot.forEach(function(childSnapshot){
       var file = childSnapshot.val();
-      var $filename = $('<p>').html('<a class="fileLink" target="_blank" href=' + file.filepath + '>' + file.filename + '<i class="fa fa-arrow-circle-o-down downloadIcon"></i></a><i class="fa fa-times-circle deleteIcon"></i>');
+      var $filename = $('<p>').html('<a class="fileLink" style="text-overflow: ellipsis;" target="_blank" href="' + file.filepath + '">' + file.filename + '<i class="fa fa-arrow-circle-o-down downloadIcon"></i></a><i class="fa fa-times-circle deleteIcon"></i>');
       var $file = $('<div>').addClass('file').attr('id', childSnapshot.key()).append($filename).attr('target', 'blank');
       $files.append($file);
     });
   });
-  var $fileFormInput = $('<input>').attr('type', 'file').attr('id', 'fileFormInput');
-  var $fileForm = $('<div>').addClass('fileForm').append($fileFormInput);
+  var $uploadInput = $('<input>').attr('type', 'file').attr('id', 'fileUploadInput');
+  var $fileFormUpload = $('<div>').addClass('col-sm-6').append($uploadInput);
+
+  var $urlInput = $('<input>').attr('type', 'text').attr('id', 'fileUrlInput').attr('placeholder', 'Enter URL');
+  var $urlButton = $('<button>').attr('id', 'fileUrlSubmit').text('ADD');
+  var $fileFormUrl = $('<div>').addClass('col-sm-6').append($urlInput).append($urlButton);
+
+  var $fileForm = $('<div>').addClass('fileForm').append($fileFormUpload).append($fileFormUrl);
 
   //render comments
   ref.child('comments').orderByChild('assignment').equalTo(key).on("value", function(commentSnapshot){
@@ -405,8 +416,8 @@ $('#assignments').on('click', '.comments .deleteIcon', function(){
 });
 
 // add file
-$('#assignments').on('change', '#fileFormInput', function(){
-  var assignmentKey = $(this).parent().parent('.assignment').attr('id');
+$('#assignments').on('change', '#fileUploadInput', function(){
+  var assignmentKey = $(this).parent().parent().parent('.assignment').attr('id');
   var filesRef = ref.child('files');
   var file = $(this)[0].files[0];
   var filename = $(this).val();
@@ -425,6 +436,27 @@ $('#assignments').on('change', '#fileFormInput', function(){
   };
 
   reader.readAsDataURL(file);
+});
+
+// add link
+$('#assignments').on('click', '#fileUrlSubmit', function(){
+  var assignmentKey = $(this).parent().parent().parent('.assignment').attr('id');
+  var url = $(this).siblings('#fileUrlInput').val();
+  var http = url.search(new RegExp(/^http:\/\//i));
+  var https = url.search(new RegExp(/^https:\/\//i));
+  if( !http || !https ) {
+  // its present
+  } else {
+    url = 'http://' + url;
+  }
+
+  ref.child('files').push({
+    filename: url,
+    filepath: url,
+    assignment: assignmentKey,
+  });
+
+  findAssignmentInfo(currentGroup);
 });
 
 // delete file

@@ -41,7 +41,7 @@ input, textarea {
 }
 
 .assignmentDescription { white-space: pre-wrap; }
-.buttoncomplete, .buttonincomplete, .buttondelete, #assignmentFormSubmit, #commentFormSubmit, #groupFormSubmit, #fileFormSubmit {
+.assignment input, .assignment button {
   width: 100%;
   padding: 10px 20px;
   margin-bottom: 5px;
@@ -56,14 +56,17 @@ p.complete { color: #b3b3b3; }
 .addAssignment, .addGroup { padding-top: 5px; cursor: pointer; }
 .addAssignment:hover, .addGroup:hover { color: #f7931e; }
 
-#fileFormInput { margin-left: -10px; }
+.fileForm .col-sm-6 { padding: 0; }
+#fileUploadInput { padding: 0; margin-top: 10px; }
+#fileUrlInput { width: 70%; display: inline-block; margin-bottom: 20px; margin-right: 2px; }
+#fileUrlSubmit { width: 20%; float: right; }
 .comments, .files { margin-top: 25px; margin-bottom: 10px; }
 .comments h6 { margin-bottom: 8px; }
 .comment, .file { background-color: white; padding: 10px; border-radius: 5px; margin-bottom: 10px; }
 .commentauthor { color: #999999; font-weight: normal; font-size: 11px; text-transform: uppercase;}
 #commentFormInput { width: 70%; margin-right: 5%; padding: 10px;}
-#commentFormSubmit { width: 25%; text-align: center; font-size: 13px; font-family: 'Roboto', sans-serif; font-weight: bold; }
-#commentFormSubmit:hover { background-color: #b4d9d7; }
+#commentFormSubmit, #fileUrlSubmit { width: 25%; text-align: center; font-size: 13px; font-family: 'Roboto', sans-serif; font-weight: bold; }
+#commentFormSubmit:hover, #fileUrlSubmit:hover { background-color: #b4d9d7; }
 .commentForm { margin-bottom: 10px; }
 
 .fileLink { color: #888; font-family: 'Roboto', sans-serif; }
