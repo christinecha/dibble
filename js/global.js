@@ -141,18 +141,23 @@ function getName(authData) {
 // LOAD ACCOUNT INFO ------------------------------------------
 var usersGroupsRef = usersRef.child(currentUser.uid).child('groups');
 var groupsLoaded = false;
+var initialGroupLoaded = false;
 
 // initial load (one time only)
 usersGroupsRef.once("value", function (snapshot) {
   snapshot.forEach(function(groupSnapshot){
     var groupKey = groupSnapshot.key();
     groupsRef.child(groupKey).on("value", function(snapshot){
-      $('.currentGroupIndicator').remove();
-      $('.group').removeClass('currentGroup');
-      currentGroup = snapshot.key();
-      console.log('current group is ' + currentGroup);
       var $currentGroupIndicator = $('<img>').attr('src', 'assets/triangle-right-blue.png').addClass('currentGroupIndicator');
-      var $group = $('<div>').text(snapshot.val().name).addClass('group').addClass('currentGroup').attr('id', groupKey).attr('data-name', snapshot.val().name).append($currentGroupIndicator);
+      var $group = $('<div>').text(snapshot.val().name).addClass('group').attr('id', groupKey).attr('data-name', snapshot.val().name);
+      if (initialGroupLoaded == false) {
+        currentGroup = snapshot.key();
+        console.log('current group is ' + currentGroup);
+        $group.addClass('currentGroup').append($currentGroupIndicator);
+        displayGroupInfo(currentGroup);
+        findAssignmentInfo(currentGroup);
+        initialGroupLoaded = true;
+      };
       $('#groups').append($group);
       if ($('#groups').children('.group').length == 0){
         $('#noGroups').show();
@@ -180,15 +185,6 @@ function findAssignmentInfo(currentGroup){
   } else {
     $('#noAssignments').hide();
   };
-};
-
-//use the Group Keys to find them in the Group Ref.
-function findGroupInfo(groupKey) {
-  console.log('2. getting group info');
-  groupsRef.child(groupKey).on("value", function(snapshot){
-    var groupName = snapshot.val().name;
-    displayGroup(snapshot.key(), groupName);
-  });
 };
 
 function displayAssignment (key, title, description, complete) {
@@ -301,11 +297,7 @@ $('#groupFormSubmit').on('click', function(){
 });
 
 
-// DISPLAY CURRENT GROUP'S ASSIGNMENTS -------------------------------------
-
-
-
-
+// ON USER EVENTS EDIT ACCOUNT INFO -------------------------------------
 
 //expand assignment
 $('#assignments').on('click', '.assignmentInfo', function(){
