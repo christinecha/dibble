@@ -169,9 +169,6 @@ usersGroupsRef.once("value", function (snapshot) {
   groupsLoaded = true;
 });
 
-// if (groupsLoaded == true) {
-//   console.log('current group is now ' + currentGroup);
-// };
 
 function findAssignmentInfo(currentGroup){
   $('#assignments').empty();
@@ -304,7 +301,9 @@ $('#assignments').on('click', '.assignmentInfo', function(){
   if ($(this).hasClass('forceShow') == true) {
   } else {
     $(this).parent().children('.comments').toggle();
+    $(this).parent().children('.commentForm').toggle();
     $(this).parent().children('.files').toggle();
+    $(this).parent().children('.fileForm').toggle();
     $(this).parent().children('button').toggle();
   };
 });
