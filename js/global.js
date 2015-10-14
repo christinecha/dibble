@@ -103,6 +103,9 @@ function authDataCallback(authData) {
     var currentUserRef = usersRef.child(currentUserId);
     currentUserRef.on("value", function(snapshot) {
       currentUserObj = snapshot.val();
+      $('.accountinfo-firstname').text(currentUserObj.firstname);
+      $('.accountinfo-lastname').text(currentUserObj.lastname);
+      $('.accountinfo-email').text(currentUserObj.email);
     });
   } else {
     console.log("User is logged out");
@@ -137,6 +140,9 @@ function getName(authData) {
        return authData.password.email.replace(/@.*/, '');
   }
 };
+
+
+
 
 // LOAD ACCOUNT INFO ------------------------------------------
 var usersGroupsRef = usersRef.child(currentUser.uid).child('groups');
@@ -290,7 +296,7 @@ $('#groupFormSubmit').on('click', function(){
   $('#groupTitleInput').val('');
   $('#groupPartnerInput').val('');
   $('#groupForm').hide();
-  findGroups();
+  location.href = "account.html";
 });
 
 

@@ -1,5 +1,5 @@
 .forceShow { display: visible; }
-
+.sidebar { border-right: 2px solid #fafafa; padding-right: 30px; }
 #home { margin-top: 80px; }
 
 #assignmentForm, #groupForm {
@@ -41,7 +41,6 @@ input, textarea {
 }
 
 .assignmentDescription { white-space: pre-wrap; }
-
 .buttoncomplete, .buttonincomplete, .buttondelete, #assignmentFormSubmit, #commentFormSubmit, #groupFormSubmit, #fileFormSubmit {
   width: 100%;
   padding: 10px 20px;
@@ -65,6 +64,7 @@ p.complete { color: #b3b3b3; }
 #commentFormInput { width: 70%; margin-right: 5%; padding: 10px;}
 #commentFormSubmit { width: 25%; text-align: center; font-size: 13px; font-family: 'Roboto', sans-serif; font-weight: bold; }
 #commentFormSubmit:hover { background-color: #b4d9d7; }
+.commentForm { margin-bottom: 10px; }
 
 .fileLink { color: #888; font-family: 'Roboto', sans-serif; }
 .fileLink:hover { color: #7aa6b2; }
