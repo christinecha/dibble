@@ -49,7 +49,7 @@ input, textarea {
   border-radius: 5px;
 }
 
-.buttoncomplete, .buttonincomplete, .buttondelete { display: none; }
+/*.buttoncomplete, .buttonincomplete, .buttondelete { display: none; }*/
 
 div.complete { background-color: #e6e6e6; }
 h3.complete { color: #808080; }
@@ -58,7 +58,7 @@ p.complete { color: #b3b3b3; }
 .addAssignment:hover, .addGroup:hover { color: #f7931e; }
 
 #fileFormInput { margin-left: -10px; }
-.comments, .files { margin-top: 25px; display: none; margin-bottom: 10px; }
+.comments, .files { margin-top: 25px; margin-bottom: 10px; }
 .comments h6 { margin-bottom: 8px; }
 .comment, .file { background-color: white; padding: 10px; border-radius: 5px; margin-bottom: 10px; }
 .commentauthor { color: #999999; font-weight: normal; font-size: 11px; text-transform: uppercase;}
