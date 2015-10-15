@@ -28,11 +28,14 @@ input, textarea {
   font-size: 13px;
   font-weight: normal;
   padding: 5px 10px;
+  border: none;
+  width: 100%;
 }
 
 #header { position: absolute; top: 0; z-index: 100; width: 100%; }
-
 #home, #login { padding: 0 20px; }
+.forceShow { display: visible; }
+
 
 .dropzone {
   height: 30px;

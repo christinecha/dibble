@@ -14,8 +14,8 @@
     <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
     <!-- Firebase JS -->
     <script src="https://cdn.firebase.com/js/client/2.3.1/firebase.js"></script>
-    <!-- Braintree -->
-    <script src="https://js.braintreegateway.com/v2/braintree.js"></script>
+    <!-- Skype -->
+    <script type="text/javascript" src="http://www.skypeassets.com/i/scom/js/skype-uri.js"></script>
     <title>dibble</title>
 
   </head>
@@ -61,12 +61,55 @@
             </div>
             <br>
             <br>
-            <div id='quicklinks'>
-              <h2>ACCOUNT INFO</h2>
+            <div id='accountinfo'>
+              <h2>ACCOUNT INFO <i class="fa fa-pencil-square-o editIcon"></i></h2>
               <hr style="margin-top: 10px;">
-              <h5><span class='accountinfo-firstname'></span> <span class='accountinfo-lastname'></span></h5>
-              <h5><span class='accountinfo-email'></span></h5>
-              <h5><span class='accountinfo-skype'>skype (coming soon)</span></h5>
+              <div class='accountinfo-field row'>
+                <div class='accountinfo-label col-xs-4'>NAME</div>
+                <div class='accountinfo-value col-xs-8'>
+                  <span class='accountinfo-firstname'>&nbsp;</span>
+                  <span class='accountinfo-lastname'>&nbsp;</span>
+                </div>
+              </div>
+              <div class='accountinfo-field row'>
+                <div class='accountinfo-label col-xs-4'>EMAIL</div>
+                <div class='accountinfo-value col-xs-8'>
+                  <span class='accountinfo-email'>&nbsp;</span>
+                </div>
+              </div>
+              <div class='accountinfo-field row'>
+                <div class='accountinfo-label col-xs-4'>PW</div>
+                <div class='accountinfo-value col-xs-8'>
+                  <span class='accountinfo-password'>•••••••••</span>
+                  <span id="change-password">CHANGE</span>
+                  <div class='passwordForm' style="display:none;">
+                    <br>
+                    <input type="text" id="oldPassword" placeholder="old password">
+                    <input type="text" id="newPassword" placeholder="new password">
+                    <button id="update-password">UPDATE PASSWORD</button>
+                    <div id="error-password"></div>
+                  </div>
+                </div>
+              </div>
+              <div class='accountinfo-field row'>
+                <div class='accountinfo-label col-xs-4'>SKYPE</div>
+                <div class='accountinfo-value col-xs-8'>
+                  <span class='accountinfo-skype'>&nbsp;</span>
+                </div>
+              </div>
+              <div class='accountinfo-field row'>
+                <div class='accountinfo-label col-xs-4'>VENMO</div>
+                <div class='accountinfo-value col-xs-8'>
+                  <span class='accountinfo-venmo'>&nbsp;</span>
+                </div>
+              </div>
+              <div class='accountinfo-field row'>
+                <div class='accountinfo-label col-xs-4'>PAYPAL</div>
+                <div class='accountinfo-value col-xs-8'>
+                  <span class='accountinfo-paypal'>&nbsp;</span>
+                </div>
+              </div>
+              <button id="accountinfo-update" style="display:none;">UPDATE</button>
             </div>
           </div>
           <!-- <div class='col-sm-8 noActivity text-center'>

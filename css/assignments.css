@@ -1,13 +1,33 @@
-.forceShow { display: visible; }
-.sidebar { border-right: 2px solid #fafafa; padding-right: 30px; }
+/* PAGE-WIDE */
 #home { margin-top: 80px; }
-
 #assignmentForm, #groupForm {
   background-color: #b4d9d7;
   padding: 20px;
   margin-bottom: 5px;
   display: none;
 }
+#assignmentFormSubmit, #groupFormSubmit { background-color: #7aa6b2; }
+#noAssignments, #noGroups {
+  background-color: #fafafa;
+  padding: 20px;
+  text-transform: uppercase;
+  font-size: 11px;
+  text-align: center;
+}
+
+/* SIDEBAR */
+.sidebar { border-right: 2px solid #fafafa; padding-right: 30px; padding-bottom: 200px; }
+
+#groupInfo { background-color: #fafafa; padding: 20px; }
+#groupInfo h3 { color: #aaa; }
+.memberName { margin: 2px 0; padding: 10px; background-color: white; }
+.memberOptions { float: right; display: inline-block; color: #ccc; }
+.memberOptions a { font-size: 11px; color: #888; cursor: pointer; }
+.memberContact, .memberPay, .memberCharge { border: 2px solid white; padding: 10px; display: none; text-align: center; }
+.contact-icon { background-color: #b4d9d7; border-radius: 3px; margin-right: 3px; }
+.memberInfo input { width: 55%; padding: 10px 20px; }
+.memberInfo button { width: 40%; font-family: 'Roboto', sans-serif; font-size: 13px; font-weight: bold; }
+.memberInfo button:hover { background-color: #b4d9d7; }
 
 .suggestedMaterial {
   background-color: #ffae6e;
@@ -17,80 +37,6 @@
   border-radius: 10px;
   color: white;
 }
-
-input, textarea {
-  border: none;
-  width: 100%;
-}
-
-.assignmentInfo { cursor: pointer; }
-#assignmentFormSubmit, #groupFormSubmit { background-color: #7aa6b2; }
-
-#noAssignments, #noGroups {
-  background-color: #fafafa;
-  padding: 20px;
-  text-transform: uppercase;
-  font-size: 11px;
-  text-align: center;
-}
-
-.assignment {
-  padding: 20px;
-  background-color: #fafafa;
-  margin-bottom: 5px;
-}
-
-.assignmentDescription { white-space: pre-wrap; }
-.assignment input, button {
-  width: 100%;
-  padding: 10px 20px;
-  margin-bottom: 5px;
-  border-radius: 5px;
-}
-
-/*.buttoncomplete, .buttonincomplete, .buttondelete { display: none; }*/
-
-div.complete { background-color: #e6e6e6; }
-h3.complete { color: #808080; }
-p.complete { color: #b3b3b3; }
-.addAssignment, .addGroup { padding-top: 5px; cursor: pointer; }
-.addAssignment:hover, .addGroup:hover { color: #f7931e; }
-
-.fileForm .col-sm-6 { padding: 0; }
-#fileUploadInput { padding: 0; margin-top: 10px; }
-#fileUrlInput { width: 70%; display: inline-block; margin-bottom: 20px; margin-right: 2px; }
-#fileUrlSubmit { width: 20%; float: right; }
-.comments, .files { margin-top: 25px; margin-bottom: 10px; }
-.comments h6 { margin-bottom: 8px; }
-.comment, .file { background-color: white; padding: 10px; border-radius: 5px; margin-bottom: 10px; }
-.commentauthor { color: #999999; font-weight: normal; font-size: 11px; text-transform: uppercase;}
-#commentFormInput { width: 70%; margin-right: 5%; padding: 10px;}
-#commentFormSubmit, #fileUrlSubmit { width: 25%; text-align: center; font-size: 13px; font-family: 'Roboto', sans-serif; font-weight: bold; }
-#commentFormSubmit:hover, #fileUrlSubmit:hover { background-color: #b4d9d7; }
-.commentForm { margin-bottom: 10px; }
-
-.fileLink { color: #888; font-family: 'Roboto', sans-serif; }
-.fileLink:hover { color: #7aa6b2; }
-
-.editIcon { margin-top: -20px; font-size: 18px; }
-.downloadIcon { margin-left: 5px; }
-.deleteIcon, .editIcon { float: right; color: #aaa; cursor: pointer; }
-.deleteIcon:hover, .editIcon:hover { color: #7aa6b2; }
-
-.buttoncomplete, .buttonincomplete { background-color: #7aa6b2; }
-.buttondelete { background-color: #f7931e;}
-
-#groupInfo { background-color: #fafafa; padding: 20px; }
-#groupInfo h3 { color: #aaa; }
-.memberName { margin: 2px 0; padding: 10px; background-color: white; }
-.memberOptions { float: right; display: inline-block; color: #ccc; }
-.memberOptions a { font-size: 11px; color: #888; cursor: pointer; }
-.memberContact, .memberPay, .memberCharge { border: 2px solid white; padding: 10px; display: none; text-align: center; }
-.memberInfo input { width: 55%; padding: 10px 20px; }
-.memberInfo button { width: 40%; font-family: 'Roboto', sans-serif; font-size: 13px; font-weight: bold; }
-.memberInfo button:hover { background-color: #b4d9d7; }
-
-.contact-icon { background-color: #b4d9d7; border-radius: 3px; margin-right: 3px; }
 
 .group {
   width: 100%;
@@ -105,3 +51,57 @@ p.complete { color: #b3b3b3; }
 .currentGroupIndicator { width: 19px; margin-top: -2px; margin-right: -38px; float:right; }
 .editGroup { float: right; background-color: transparent; }
 .editGroup:hover { text-decoration: underline; }
+
+#accountinfo .editIcon { margin-top: 5px; font-size: 18px; }
+.accountinfo-field { background-color: #b4d9d7; font-size: 12px; width: 100%; margin: 0 0 5px 0; }
+.accountinfo-label { background-color: #b4d9d7; color: white; padding: 10px 20px; }
+.accountinfo-value { background-color: #fafafa; color: #888; padding: 10px 20px; }
+#change-password { font-size: 11px; float: right; margin-top: 1px; cursor: pointer; }
+#change-password:hover { color: #f7931e; }
+
+
+
+/* ASSIGNMENTS */
+.addAssignment, .addGroup { padding-top: 5px; cursor: pointer; }
+.addAssignment:hover, .addGroup:hover { color: #f7931e; }
+.assignment {
+  padding: 20px;
+  background-color: #fafafa;
+  margin-bottom: 5px;
+}
+.assignmentInfo { cursor: pointer; }
+.assignmentDescription { white-space: pre-wrap; }
+.assignment input, button {
+  width: 100%;
+  padding: 10px 20px;
+  margin-bottom: 5px;
+  border-radius: 5px;
+}
+div.complete { background-color: #e6e6e6; }
+h3.complete { color: #808080; }
+p.complete { color: #b3b3b3; }
+
+.comments, .files { margin-top: 25px; margin-bottom: 10px; }
+.comment, .file { background-color: white; padding: 10px; border-radius: 5px; margin-bottom: 10px; }
+
+.fileForm .col-sm-6 { padding: 0; }
+#fileUploadInput { padding: 0; margin-top: 10px; }
+#fileUrlInput { width: 70%; display: inline-block; margin-bottom: 20px; margin-right: 2px; }
+#fileUrlSubmit { width: 20%; float: right; }
+.fileLink { color: #888; font-family: 'Roboto', sans-serif; }
+.fileLink:hover { color: #7aa6b2; }
+
+.comments h6 { margin-bottom: 8px; }
+.commentauthor { color: #999999; font-weight: normal; font-size: 11px; text-transform: uppercase;}
+#commentFormInput { width: 70%; margin-right: 5%; padding: 10px;}
+#commentFormSubmit, #fileUrlSubmit { width: 25%; text-align: center; font-size: 13px; font-family: 'Roboto', sans-serif; font-weight: bold; }
+#commentFormSubmit:hover, #fileUrlSubmit:hover { background-color: #b4d9d7; }
+.commentForm { margin-bottom: 10px; }
+
+.activity .editIcon { margin-top: -20px; font-size: 18px; }
+.downloadIcon { margin-left: 5px; }
+.deleteIcon, .editIcon { float: right; color: #aaa; cursor: pointer; }
+.deleteIcon:hover, .editIcon:hover { color: #7aa6b2; }
+
+.buttoncomplete, .buttonincomplete { background-color: #7aa6b2; }
+.buttondelete { background-color: #f7931e;}

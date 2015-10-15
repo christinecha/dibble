@@ -106,6 +106,9 @@ function authDataCallback(authData) {
       $('.accountinfo-firstname').text(currentUserObj.firstname);
       $('.accountinfo-lastname').text(currentUserObj.lastname);
       $('.accountinfo-email').text(currentUserObj.email);
+      $('.accountinfo-skype').text(currentUserObj.skype);
+      $('.accountinfo-venmo').text(currentUserObj.venmo);
+      $('.accountinfo-paypal').text(currentUserObj.paypal);
     });
   } else {
     console.log("User is logged out");
@@ -275,7 +278,12 @@ function displayGroupInfo(currentGroup) {
       var $memberEmail = $('<img>').attr('src', 'assets/contact-icon-03.png').addClass('contact-icon');
       $memberEmail = $('<a>').attr('href', 'mailto:' + userSnapshot.val().email).append($memberEmail);
       var $memberSkype = $('<img>').attr('src', 'assets/contact-icon-04.png').addClass('contact-icon');
-      $memberSkype = $('<a>').attr('href', 'mailto:' + userSnapshot.val().email).append($memberSkype);
+      if (typeof userSnapshot.val().skype === 'undefined'){
+        $memberSkype = '';
+      } else {
+        $memberSkype = $('<a>').attr('href', 'skype:' + userSnapshot.val().skype + '?call').append($memberSkype);
+      };
+
       var $memberContact = $('<div>').addClass('memberContact').append($memberEmail).append($memberSkype);
 
       var $memberPay = $('<div>').addClass('memberPay');
@@ -296,7 +304,16 @@ function displayGroupInfo(currentGroup) {
 };
 
 // ON USER EVENTS, UPDATE ACCOUNT INFO -------------------------------
+// SIDEBAR ACTIVITY
 
+//expand Member info
+$('.groupMembers').on('click', '.member-expand', function(){
+  var target = $(this).attr('data-name');
+  var targetClass = '.' + target;
+  $(this).parent().parent().parent().children(targetClass).toggle();
+});
+
+//switch group
 $('#groups').on("click", ".group", function(){
   $('.currentGroupIndicator').remove();
   $('.group').removeClass('currentGroup');
@@ -312,6 +329,7 @@ $('#groups').on("click", ".group", function(){
   findAssignmentInfo(currentGroup);
 });
 
+//add group
 $('.addGroup').on('click', function(){
   $('#groupForm').toggle();
 });
@@ -327,6 +345,9 @@ $('#groupFormSubmit').on('click', function(){
   });
   var newGroupId = newGroupRef.key();
   usersRef.orderByChild("email").equalTo(newGroupPartner).on('value', function(snapshot) {
+    if (snapshot.val() == null) {
+
+    }
     snapshot.forEach(function(userSnapshot) {
       newGroupPartnerId = userSnapshot.key();
       groupsRef.child(newGroupId).child('members').child(newGroupPartnerId).set(true);
@@ -343,15 +364,125 @@ $('#groupFormSubmit').on('click', function(){
   location.href = "account.html";
 });
 
+//edit account info
+var accountInfoExpanded = false;
+  $('#accountinfo').on('click', '.editIcon', function(){
+    if (accountInfoExpanded == false){
+    var firstName = $('.accountinfo-firstname').text();
+    var lastName = $('.accountinfo-lastname').text();
+    var email = $('.accountinfo-email').text();
+    var skype = $('.accountinfo-skype').text();
+    var venmo = $('.accountinfo-venmo').text();
+    var paypal = $('.accountinfo-paypal').text();
+
+    $('.accountinfo-firstname').replaceWith('<input type="text" id="firstNameInput" value="' + firstName + '">');
+    $('.accountinfo-lastname').replaceWith('<input type="text" id="lastNameInput" value="' + lastName + '">');
+    $('.accountinfo-email').replaceWith('<input type="text" id="emailOld" value="' + email + '" readonly="true">');
+    $('#emailOld').parent().append('<input type="text" id="emailNew" placeholder="new email">').append('<input type="password" id="passwordConf" placeholder="password to confirm">').append('<div class="error-email"></div>');
+    $('.accountinfo-skype').replaceWith('<input type="text" id="skypeInput" value="' + skype + '">');
+    $('.accountinfo-venmo').replaceWith('<input type="text" id="venmoInput" value="' + venmo + '">');
+    $('.accountinfo-paypal').replaceWith('<input type="text" id="paypalInput" value="' + paypal + '">');
+    $('#accountinfo-update').show();
+    accountInfoExpanded = true;
+  } else {
+    // do nothing
+  };
+});
+
+$('#accountinfo-update').on('click', function(){
+  var firstName = $('#firstNameInput').val();
+  var lastName = $('#lastNameInput').val();
+  var emailOld = $('#emailOld').val();
+  var emailNew = $('#emailNew').val();
+  var passwordConf = $('#passwordConf').val();
+  var skype = $('#skypeInput').val();
+  var venmo = $('#venmoInput').val();
+  var paypal = $('#paypalInput').val();
+
+  var updateUserInfo = function() {
+    usersRef.child(currentUserId).update({
+      firstname: firstName,
+      lastname: lastName,
+      email: emailNew,
+      skype: skype,
+      venmo: venmo,
+      paypal: paypal
+    });
+    location.href="account.html";
+  };
+
+  if (emailNew !== ''){
+    ref.changeEmail({
+      oldEmail: emailOld,
+      newEmail: emailNew,
+      password: passwordConf
+    }, function(error) {
+      if (error) {
+        switch (error.code) {
+          case "INVALID_PASSWORD":
+            $('.error-email').text("The specified user account password is incorrect.");
+            break;
+          case "INVALID_USER":
+            $('.error-email').text("The specified user account does not exist.");
+            break;
+          default:
+            $('.error-email').text("Please enter a valid email address.");
+            break;
+        }
+      } else {
+        console.log("User email changed successfully!");
+        updateUserInfo();
+      }
+    });
+  } else {
+    emailNew = emailOld;
+    updateUserInfo();
+  };
+});
+
+$('#change-password').on('click', function(){
+  $('.passwordForm').toggle();
+});
+
+$('#update-password').on('click', function(){
+  var email = $('.accountinfo-email').text();
+  if (accountInfoExpanded == true){
+    email = $('#emailOld').val();
+  } else {
+    //do nothing
+  };
+  var oldPassword = $('#oldPassword').val();
+  var newPassword = $('#newPassword').val();
+
+  ref.changePassword({
+    email: email,
+    oldPassword: oldPassword,
+    newPassword: newPassword
+  }, function(error) {
+    if (error) {
+      switch (error.code) {
+        case "INVALID_PASSWORD":
+          $('#error-password').text("The specified user account password is incorrect.");
+          break;
+        case "INVALID_USER":
+          $('#error-password').text("The specified user account does not exist.");
+          break;
+        default:
+          $('#error-password').text("Error changing password:", error);
+      }
+    } else {
+      console.log("User password changed successfully!");
+      $('#oldPassword').val('');
+      $('#newPassword').val('');
+      $('#error-password').val('');
+    }
+  });
+});
+
+
 
 // ON USER EVENTS EDIT ACCOUNT INFO -------------------------------------
 
-//expand Member info
-$('.groupMembers').on('click', '.member-expand', function(){
-  var target = $(this).attr('data-name');
-  var targetClass = '.' + target;
-  $(this).parent().parent().parent().children(targetClass).toggle();
-});
 
 //expand assignment
 $('#assignments').on('click', '.assignmentInfo', function(){
