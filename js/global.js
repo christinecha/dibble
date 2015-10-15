@@ -286,14 +286,19 @@ function displayGroupInfo(currentGroup) {
 
       var $memberContact = $('<div>').addClass('memberContact').append($memberEmail).append($memberSkype);
 
-      var $memberPay = $('<div>').addClass('memberPay');
-      var $memberCharge = $('<div>').addClass('memberCharge');
-      if (userSnapshot.val().venmo == null) {
+      var $memberPay = $('<div>').addClass('memberPay').append('<input type="number" min="0.01" step="0.01" value="0.00">');
+      var $memberCharge = $('<div>').addClass('memberCharge').append('<input type="number" min="0.01" step="0.01" value="0.00">');
+      if (userSnapshot.val().venmo != null) {
+        $memberPay = $memberPay.append(' <button id="memberPayVenmo" data-user="'+ userSnapshot.val().venmo + '">VENMO</button>');
+        $memberCharge = $memberCharge.append(' <button id="memberChargeVenmo" data-user="'+ userSnapshot.val().venmo + '">VENMO</button>');
+      };
+      if (userSnapshot.val().paypal != null) {
+        $memberPay = $memberPay.append(' <button id="memberPayPaypal" data-user="'+ userSnapshot.val().paypal + '">PAYPAL</button>');
+        // $memberCharge = $memberCharge.append(' <button id="memberChargePaypal" data-user="'+ userSnapshot.val().paypal + '">PAYPAL</button>');
+      };
+      if ((userSnapshot.val().venmo == null) && (userSnapshot.val().paypal == null)) {
         $memberPay = $memberPay.append('<p>This user has not set up payment yet.</p>')
         $memberCharge = $memberCharge.append('<p>This user has not set up payment yet.</p>')
-      } else {
-        $memberPay = $memberPay.append('<input type="number" min="0.01" step="0.01" value="0.00"> <button id="memberPaySubmit">PAY</button>');
-        $memberCharge = $memberCharge.append('<input type="number" min="0.01" step="0.01" value="0.00"> <button id="memberPaySubmit">CHARGE</button>');
       };
 
       var $memberInfo = $('<div>').addClass('memberInfo').append($memberName).append($memberContact).append($memberPay).append($memberCharge);
@@ -310,7 +315,39 @@ function displayGroupInfo(currentGroup) {
 $('.groupMembers').on('click', '.member-expand', function(){
   var target = $(this).attr('data-name');
   var targetClass = '.' + target;
-  $(this).parent().parent().parent().children(targetClass).toggle();
+  if ($(this).hasClass('expanded') == true){
+    $(this).parent().parent().parent().children(targetClass).hide();
+    $(this).removeClass('expanded');
+  } else {
+    $('.member-expand').removeClass('expanded');
+    $(this).parent().parent().parent().children('div').hide();
+    $(this).addClass('expanded');
+    $(this).parent().parent().parent().children(targetClass).show();
+  };
+});
+
+//pay via venmo
+$('.groupMembers').on('click', '#memberPayVenmo', function(){
+  var user = $(this).attr('data-user');
+  var amount = $(this).siblings('input').val();
+  var url = 'https://venmo.com/' + user + '?txn=pay&amount=' + amount;
+  window.open(url, '_blank');
+});
+
+//charge via venmo
+$('.groupMembers').on('click', '#memberChargeVenmo', function(){
+  var user = $(this).attr('data-user');
+  var amount = $(this).siblings('input').val();
+  var url = 'https://venmo.com/' + user + '?txn=charge&amount=' + amount;
+  window.open(url, '_blank');
+});
+
+//pay via paypal
+$('.groupMembers').on('click', '#memberPayPaypal', function(){
+  var user = $(this).attr('data-user');
+  var amount = $(this).siblings('input').val();
+  var url = 'https://www.paypal.com/cgi-bin/webscr?business=' + user + '&cmd=_xclick&currency_code=USD&amount=' + amount + '&item_name=Payment%20via%20Dibbl';
+  window.open(url, '_blank');
 });
 
 //switch group

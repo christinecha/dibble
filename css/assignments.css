@@ -23,10 +23,11 @@
 .memberName { margin: 2px 0; padding: 10px; background-color: white; }
 .memberOptions { float: right; display: inline-block; color: #ccc; }
 .memberOptions a { font-size: 11px; color: #888; cursor: pointer; }
+.memberOptions a.expanded { color: #ffae6e; }
 .memberContact, .memberPay, .memberCharge { border: 2px solid white; padding: 10px; display: none; text-align: center; }
 .contact-icon { background-color: #b4d9d7; border-radius: 3px; margin-right: 3px; }
-.memberInfo input { width: 55%; padding: 10px 20px; }
-.memberInfo button { width: 40%; font-family: 'Roboto', sans-serif; font-size: 13px; font-weight: bold; }
+.memberInfo input { width: 35%; padding: 10px 20px; }
+.memberInfo button { width: 30%; font-family: 'Roboto', sans-serif; font-size: 13px; font-weight: bold; }
 .memberInfo button:hover { background-color: #b4d9d7; }
 
 .suggestedMaterial {
@@ -55,7 +56,7 @@
 #accountinfo .editIcon { margin-top: 5px; font-size: 18px; }
 .accountinfo-field { background-color: #b4d9d7; font-size: 12px; width: 100%; margin: 0 0 5px 0; }
 .accountinfo-label { background-color: #b4d9d7; color: white; padding: 10px 20px; }
-.accountinfo-value { background-color: #fafafa; color: #888; padding: 10px 20px; }
+.accountinfo-value { background-color: #fafafa; color: #888; padding: 10px 20px; min-height: 37px; }
 #change-password { font-size: 11px; float: right; margin-top: 1px; cursor: pointer; }
 #change-password:hover { color: #f7931e; }
 
