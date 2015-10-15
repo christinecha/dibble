@@ -62,7 +62,7 @@ $('#userSignUp').on('click', function(){
         "password" : password
       }, function(error, authData) {
         console.log("Authenticated successfully with payload:", authData);
-        location.href = "account.html";
+        location.href = "onboarding.html";
       });
     }
   });
@@ -146,6 +146,18 @@ function getName(authData) {
   }
 };
 
+$('#additionalInfoSignUp').on('click', function(){
+  var skype = $('#skype').val();
+  var venmo = $('#venmo').val();
+  var phone = $('#phone').val().replace(/.\-/g, '');
+
+  ref.child("users").child(currentUserId).update({
+    skype: skype,
+    venmo: venmo,
+    phone: phone
+  });
+  location.href = "account.html";
+});
 
 
 

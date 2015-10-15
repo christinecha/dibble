@@ -7,25 +7,34 @@
   padding-top: 80px;
 }
 
+#onboarding-1 {
+  background-image: url('../assets/background-desk-2.jpeg');
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
+  text-align: center;
+  padding-top: 80px;
+}
+
 .splash-logo { width: 300px; }
 
 #home-section-1 h6 { color: white; font-size: 20px; font-family: 'Montserrat', sans-serif; font-weight: normal; }
 
 #login { text-align: center; margin-top: 50px; }
+#login input { background-color: rgba(255,255,255,.5); }
 
 input {
   margin-bottom: 5px;
   width: 100%;
-  background-color: rgba(255,255,255,.5);
   border: none;
   padding: 10px 20px;
   color: black;
 }
 
-::-webkit-input-placeholder { color:white; text-transform: uppercase; }
-::-moz-placeholder { color:#f00; } /* firefox 19+ */
-:-ms-input-placeholder { color:#f00; } /* ie */
-input:-moz-placeholder { color:#f00; }
+#login ::-webkit-input-placeholder { color:white; text-transform: uppercase; }
+#login ::-moz-placeholder { color:#f00; } /* firefox 19+ */
+#login :-ms-input-placeholder { color:#f00; } /* ie */
+#login input:-moz-placeholder { color:#f00; }
 
 .loginError {
   font-size: 11px;
@@ -37,7 +46,7 @@ input:-moz-placeholder { color:#f00; }
   display: none;
 }
 
-#userLogin, #userSignUp {
+#login button, #onboarding button {
   background-color: #b4d9d7;
   width: 100%;
   padding: 10px 20px;
@@ -48,6 +57,10 @@ input:-moz-placeholder { color:#f00; }
 
 .alreadyUser, .notUserYet { color: white; }
 .alreadyUser a, .notUserYet a { color: white; cursor: pointer;}
+
+#onboarding { max-width: 450px; background-color: rgba(255,255,255,.9); border-radius: 10px; padding: 30px; }
+#onboarding input::-webkit-inner-spin-button { display: none; }
+
 
 @media screen and (min-width: 480px) {
   #login { width: 380px; }
