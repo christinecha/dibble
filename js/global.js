@@ -180,6 +180,7 @@ usersGroupsRef.once("value", function (snapshot) {
         currentGroup = snapshot.key();
         console.log('current group is ' + currentGroup);
         $group.addClass('currentGroup').append($currentGroupIndicator);
+        $('.groupTitle').html(snapshot.val().name);
         displayGroupInfo(currentGroup);
         findAssignmentInfo(currentGroup);
         initialGroupLoaded = true;
