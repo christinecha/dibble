@@ -383,20 +383,19 @@ $('#groupFormSubmit').on('click', function(){
 });
 
 var addNewGroup = function(newGroupId, newGroupPartnerEmail){
+  console.log('trying to add', newGroupPartnerEmail);
   usersRef.orderByChild("email").equalTo(newGroupPartnerEmail).on('value', function(snapshot) {
+    console.log('finding matching users');
     snapshot.forEach(function(userSnapshot) {
       newGroupPartnerId = userSnapshot.key();
+      console.log('found', userSnapshot.val().firstname, 'at', newGroupPartnerId);
       groupsRef.child(newGroupId).child('members').child(newGroupPartnerId).set(true);
       usersRef.child(newGroupPartnerId).child('groups').child(newGroupId).set(true);
-      groupsRef.child(newGroupId).child('members').child(user).set(true);
-      usersRef.child(user).child('groups').child(newGroupId).set(true);
+      groupsRef.child(newGroupId).child('members').child(currentUserId).set(true);
+      usersRef.child(currentUserId).child('groups').child(newGroupId).set(true);
     });
-
-    $('#groupTitleInput').val('');
-    $('#groupPartnerInput').val('');
-    $('#groupForm').hide();
+    location.href = "account.html";
   });
-  location.href = "account.html";
 };
 
 //edit account info
