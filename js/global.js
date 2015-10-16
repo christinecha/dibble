@@ -382,24 +382,23 @@ $('#groupFormSubmit').on('click', function(){
     name: newGroupName,
   });
   var newGroupId = newGroupRef.key();
-  usersRef.orderByChild("email").equalTo(newGroupPartner).on('value', function(snapshot) {
-    if (snapshot.val() == null) {
 
-    }
+  usersRef.orderByChild("email").equalTo(newGroupPartner).on('value', function(snapshot) {
+    // if (snapshot.val() == null) {
+    // }
     snapshot.forEach(function(userSnapshot) {
       newGroupPartnerId = userSnapshot.key();
       groupsRef.child(newGroupId).child('members').child(newGroupPartnerId).set(true);
       usersRef.child(newGroupPartnerId).child('groups').child(newGroupId).set(true);
+      groupsRef.child(newGroupId).child('members').child(user).set(true);
+      usersRef.child(user).child('groups').child(newGroupId).set(true);
     });
+
+    $('#groupTitleInput').val('');
+    $('#groupPartnerInput').val('');
+    $('#groupForm').hide();
+    location.href = "account.html";
   });
-  // add currentUser + Invitee to Group Members
-  groupsRef.child(newGroupId).child('members').child(user).set(true);
-  //add Group to Member's Info
-  usersRef.child(user).child('groups').child(newGroupId).set(true);
-  $('#groupTitleInput').val('');
-  $('#groupPartnerInput').val('');
-  $('#groupForm').hide();
-  location.href = "account.html";
 });
 
 //edit account info
