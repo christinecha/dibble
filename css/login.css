@@ -2,10 +2,18 @@
   background-image: url('../assets/background-desk.jpeg');
   background-size: cover;
   background-position: center;
-  height: 100vh;
+  height: 600px;
   text-align: center;
   padding-top: 80px;
 }
+
+#home-section-2 {
+  height: 500px;
+  background-color: #fafafa;
+}
+
+.big-text-block { padding-top: 100px; width: 500px; margin-left: auto; margin-right: auto; }
+.big-text-block h4 { color: #888; }
 
 #onboarding-1 {
   background-image: url('../assets/background-desk-2.jpeg');
