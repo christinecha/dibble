@@ -170,30 +170,32 @@ var groupsLoaded = false;
 var initialGroupLoaded = false;
 
 // initial load (one time only)
-usersGroupsRef.once("value", function (snapshot) {
-  snapshot.forEach(function(groupSnapshot){
-    var groupKey = groupSnapshot.key();
-    groupsRef.child(groupKey).on("value", function(snapshot){
-      var $currentGroupIndicator = $('<img>').attr('src', 'assets/triangle-right-blue.png').addClass('currentGroupIndicator');
-      var $group = $('<div>').text(snapshot.val().name).addClass('group').attr('id', groupKey).attr('data-name', snapshot.val().name);
-      if (initialGroupLoaded == false) {
-        currentGroup = snapshot.key();
-        console.log('current group is ' + currentGroup);
-        $group.addClass('currentGroup').append($currentGroupIndicator);
-        $('.groupTitle').html(snapshot.val().name);
-        displayGroupInfo(currentGroup);
-        findAssignmentInfo(currentGroup);
-        initialGroupLoaded = true;
-      };
-      $('#groups').append($group);
-      if ($('#groups').children('.group').length == 0){
-        $('#noGroups').show();
-      } else {
-        $('#noGroups').hide();
-      };
+$(document).ready(function(){
+  usersGroupsRef.once("value", function (snapshot) {
+    snapshot.forEach(function(groupSnapshot){
+      var groupKey = groupSnapshot.key();
+      groupsRef.child(groupKey).on("value", function(snapshot){
+        var $currentGroupIndicator = $('<img>').attr('src', 'assets/triangle-right-blue.png').addClass('currentGroupIndicator');
+        var $group = $('<div>').text(snapshot.val().name).addClass('group').attr('id', groupKey).attr('data-name', snapshot.val().name);
+        if (initialGroupLoaded == false) {
+          currentGroup = snapshot.key();
+          console.log('current group is ' + currentGroup);
+          $group.addClass('currentGroup').append($currentGroupIndicator);
+          $('.groupTitle').html(snapshot.val().name);
+          displayGroupInfo(currentGroup);
+          findAssignmentInfo(currentGroup);
+          initialGroupLoaded = true;
+        };
+        $('#groups').append($group);
+        if ($('#groups').children('.group').length == 0){
+          $('#noGroups').show();
+        } else {
+          $('#noGroups').hide();
+        };
+      });
     });
+    groupsLoaded = true;
   });
-  groupsLoaded = true;
 });
 
 
@@ -360,7 +362,6 @@ $('#groups').on("click", ".group", function(){
   $(this).addClass('currentGroup');
   currentGroup = $(this).attr('id');
   currentGroupName = $(this).attr('data-name');
-  console.log(currentGroup + ' is now the current group at ' + currentGroupName);
   $('.groupTitle').html(currentGroupName);
   $('.menu').hide();
   displayGroupInfo(currentGroup);
@@ -375,17 +376,14 @@ $('.addGroup').on('click', function(){
 $('#groupFormSubmit').on('click', function(){
   var user = currentUser.uid;
   var newGroupName = $('#groupTitleInput').val();
-  var newGroupPartner = $('#groupPartnerInput').val();
-  var newGroupPartnerId;
-  // create Group
   var newGroupRef = groupsRef.push({
     name: newGroupName,
   });
-  var newGroupId = newGroupRef.key();
+  addNewGroup(newGroupRef.key(), $('#groupPartnerInput').val());
+});
 
-  usersRef.orderByChild("email").equalTo(newGroupPartner).on('value', function(snapshot) {
-    // if (snapshot.val() == null) {
-    // }
+var addNewGroup = function(newGroupId, newGroupPartnerEmail){
+  usersRef.orderByChild("email").equalTo(newGroupPartnerEmail).on('value', function(snapshot) {
     snapshot.forEach(function(userSnapshot) {
       newGroupPartnerId = userSnapshot.key();
       groupsRef.child(newGroupId).child('members').child(newGroupPartnerId).set(true);
@@ -397,9 +395,9 @@ $('#groupFormSubmit').on('click', function(){
     $('#groupTitleInput').val('');
     $('#groupPartnerInput').val('');
     $('#groupForm').hide();
-    location.href = "account.html";
   });
-});
+  location.href = "account.html";
+};
 
 //edit account info
 var accountInfoExpanded = false;
