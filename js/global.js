@@ -275,38 +275,42 @@ function displayGroupInfo(currentGroup) {
     console.log(snapshot.key() + ' is a member of ' + currentGroup);
     var member = snapshot.key();
     usersRef.child(member).on('value', function(userSnapshot){
-      var $memberOptions = $('<div>').addClass('memberOptions').html('<a data-name="memberContact" class="member-expand">CONTACT</a> | <a class="member-expand" data-name="memberPay">PAY</a> | <a class="member-expand" data-name="memberCharge">CHARGE</a>');
-      var $memberName = $('<p>').html('<strong>' + userSnapshot.val().firstname + ' ' + userSnapshot.val().lastname + '</strong>').addClass('memberName').append($memberOptions);
-
-      var $memberEmail = $('<img>').attr('src', 'assets/contact-icon-03.png').addClass('contact-icon');
-      $memberEmail = $('<a>').attr('href', 'mailto:' + userSnapshot.val().email).append($memberEmail);
-      var $memberSkype = $('<img>').attr('src', 'assets/contact-icon-04.png').addClass('contact-icon');
-      if (typeof userSnapshot.val().skype === 'undefined'){
-        $memberSkype = '';
+      if (userSnapshot.key() == currentUserId) {
+        //don't render
       } else {
-        $memberSkype = $('<a>').attr('href', 'skype:' + userSnapshot.val().skype + '?call').append($memberSkype);
-      };
+        var $memberOptions = $('<div>').addClass('memberOptions').html('<a data-name="memberContact" class="member-expand">CONTACT</a> <a class="member-expand" data-name="memberPay">PAY</a> <a class="member-expand" data-name="memberCharge">CHARGE</a>');
+        var $memberName = $('<p>').html('<strong>' + userSnapshot.val().firstname + ' ' + userSnapshot.val().lastname + '</strong>').addClass('memberName').attr('data-email', userSnapshot.val().email);
 
-      var $memberContact = $('<div>').addClass('memberContact').append($memberEmail).append($memberSkype);
+        var $memberEmail = $('<img>').attr('src', 'assets/contact-icon-03.png').addClass('contact-icon');
+        $memberEmail = $('<a>').attr('href', 'mailto:' + userSnapshot.val().email).append($memberEmail);
+        var $memberSkype = $('<img>').attr('src', 'assets/contact-icon-04.png').addClass('contact-icon');
+        if (typeof userSnapshot.val().skype === 'undefined'){
+          $memberSkype = '';
+        } else {
+          $memberSkype = $('<a>').attr('href', 'skype:' + userSnapshot.val().skype + '?call').append($memberSkype);
+        };
 
-      var $memberPay = $('<div>').addClass('memberPay').append('<input type="number" min="0.01" step="0.01" value="0.00">');
-      var $memberCharge = $('<div>').addClass('memberCharge').append('<input type="number" min="0.01" step="0.01" value="0.00">');
-      if (userSnapshot.val().venmo != null) {
-        $memberPay = $memberPay.append(' <button id="memberPayVenmo" data-user="'+ userSnapshot.val().venmo + '">VENMO</button>');
-        $memberCharge = $memberCharge.append(' <button id="memberChargeVenmo" data-user="'+ userSnapshot.val().venmo + '">VENMO</button>');
-      };
-      if (userSnapshot.val().paypal != null) {
-        $memberPay = $memberPay.append(' <button id="memberPayPaypal" data-user="'+ userSnapshot.val().paypal + '">PAYPAL</button>');
-        // $memberCharge = $memberCharge.append(' <button id="memberChargePaypal" data-user="'+ userSnapshot.val().paypal + '">PAYPAL</button>');
-      };
-      if ((userSnapshot.val().venmo == null) && (userSnapshot.val().paypal == null)) {
-        $memberPay = $memberPay.append('<p>This user has not set up payment yet.</p>')
-        $memberCharge = $memberCharge.append('<p>This user has not set up payment yet.</p>')
-      };
+        var $memberContact = $('<div>').addClass('memberContact').append($memberEmail).append($memberSkype);
 
-      var $memberInfo = $('<div>').addClass('memberInfo').append($memberName).append($memberContact).append($memberPay).append($memberCharge);
+        var $memberPay = $('<div>').addClass('memberPay').append('<input type="number" min="0.01" step="0.01" value="0.00">');
+        var $memberCharge = $('<div>').addClass('memberCharge').append('<input type="number" min="0.01" step="0.01" value="0.00">');
+        if (userSnapshot.val().venmo != null) {
+          $memberPay = $memberPay.append(' <button id="memberPayVenmo" data-user="'+ userSnapshot.val().venmo + '">VENMO</button>');
+          $memberCharge = $memberCharge.append(' <button id="memberChargeVenmo" data-user="'+ userSnapshot.val().venmo + '">VENMO</button>');
+        };
+        if (userSnapshot.val().paypal != null) {
+          $memberPay = $memberPay.append(' <button id="memberPayPaypal" data-user="'+ userSnapshot.val().paypal + '">PAYPAL</button>');
+          // $memberCharge = $memberCharge.append(' <button id="memberChargePaypal" data-user="'+ userSnapshot.val().paypal + '">PAYPAL</button>');
+        };
+        if ((userSnapshot.val().venmo == null) && (userSnapshot.val().paypal == null)) {
+          $memberPay = $memberPay.append('<p>This user has not set up payment yet.</p>')
+          $memberCharge = $memberCharge.append('<p>This user has not set up payment yet.</p>')
+        };
 
-      $('.groupMembers').append($memberInfo);
+        var $memberInfo = $('<div>').addClass('memberInfo').append($memberName).append($memberOptions).append($memberContact).append($memberPay).append($memberCharge);
+
+        $('.groupMembers').append($memberInfo);
+      };
     });
   });
 };
@@ -314,18 +318,72 @@ function displayGroupInfo(currentGroup) {
 // ON USER EVENTS, UPDATE ACCOUNT INFO -------------------------------
 // SIDEBAR ACTIVITY
 
+//edit group
+$('#groupInfo').on('click', '.editIcon', function(){
+  var memberEmail = $('.memberName').attr('data-email');
+  var groupName = $('.groupTitle').text();
+  $(this).hide();
+  $('.memberInfo').children().hide();
+  $('.groupTitle').replaceWith('<input id="groupNameInput" type="text" value="' + groupName + '" style="font-size:18px;">');
+  $('.groupMembers').append('<input id="memberEmailInput" type="email" value="' + memberEmail + '"><br><button id="groupMemberUpdate">UPDATE</button> <button id="groupMemberRemove">REMOVE</button>');
+  $('#groupInfo').css('height', '200px');
+});
+
+//update group changes
+$('#groupInfo').on('click', '#groupMemberUpdate', function(){
+  var prevMemberEmail = $('.memberName').attr('data-email');
+  var groupName= $('#groupNameInput').val();
+  var memberEmail = $('#memberEmailInput').val();
+
+  updateGroup(groupName, prevMemberEmail, memberEmail);
+});
+
+var updateGroup = function(groupName, prevMemberEmail, memberEmail){
+  groupsRef.child(currentGroup).update({
+    name: groupName,
+  });
+
+  if (prevMemberEmail == memberEmail) {
+    location.href = "account.html";
+  } else {
+    groupsRef.child(currentGroup).child('members').remove();
+
+    usersRef.orderByChild("email").equalTo(prevMemberEmail).on('value', function(snapshot) {
+      snapshot.forEach(function(userSnapshot) {
+        memberId = userSnapshot.key();
+        usersRef.child(memberId).child('groups').child(currentGroup).remove();
+      });
+    });
+
+    usersRef.orderByChild("email").equalTo(memberEmail).on('value', function(snapshot) {
+      snapshot.forEach(function(userSnapshot) {
+        memberId = userSnapshot.key();
+        groupsRef.child(currentGroup).child('members').child(memberId).set(true);
+        usersRef.child(memberId).child('groups').child(currentGroup).set(true);
+        groupsRef.child(currentGroup).child('members').child(currentUserId).set(true);
+        usersRef.child(currentUserId).child('groups').child(currentGroup).set(true);
+      });
+      location.href = "account.html";
+    });
+  };
+};
+
+
+
 //expand Member info
 $('.groupMembers').on('click', '.member-expand', function(){
   var target = $(this).attr('data-name');
   var targetClass = '.' + target;
   if ($(this).hasClass('expanded') == true){
-    $(this).parent().parent().parent().children(targetClass).hide();
+    $(this).parent().parent().children(targetClass).hide();
     $(this).removeClass('expanded');
   } else {
     $('.member-expand').removeClass('expanded');
-    $(this).parent().parent().parent().children('div').hide();
+    $(this).parent().parent().children('.memberContact').hide();
+    $(this).parent().parent().children('.memberPay').hide();
+    $(this).parent().parent().children('.memberCharge').hide();
     $(this).addClass('expanded');
-    $(this).parent().parent().parent().children(targetClass).show();
+    $(this).parent().parent().children(targetClass).show();
   };
 });
 

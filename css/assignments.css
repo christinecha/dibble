@@ -20,15 +20,18 @@
 
 #groupInfo { background-color: #fafafa; padding: 20px; }
 #groupInfo h3 { color: #aaa; }
+.addMember { float: right; cursor: pointer; }
+.addMember:hover { color: #ffae6e; }
 .memberName { margin: 2px 0; padding: 10px; background-color: white; }
-.memberOptions { float: right; display: inline-block; color: #ccc; }
-.memberOptions a { font-size: 11px; color: #888; cursor: pointer; }
-.memberOptions a.expanded { color: #ffae6e; }
+.memberOptions { color: #ccc; text-align: center; margin: 12px 0; }
+.memberOptions a { font-size: 11px; color: white; cursor: pointer; background-color: #b4d9d7; padding: 10px 20px; }
+.memberOptions a.expanded { background-color: #ffae6e; }
 .memberContact, .memberPay, .memberCharge { border: 2px solid white; padding: 10px; display: none; text-align: center; }
 .contact-icon { background-color: #b4d9d7; border-radius: 3px; margin-right: 3px; }
-.memberInfo input { width: 35%; padding: 10px 20px; }
-.memberInfo button { width: 30%; font-family: 'Roboto', sans-serif; font-size: 13px; font-weight: bold; }
-.memberInfo button:hover { background-color: #b4d9d7; }
+#groupMemberUpdate, #groupMemberRemove { width: 48%; font-family: 'Roboto', sans-serif; font-size: 13px; font-weight: bold; }
+#groupMemberUpdate { float: left; }
+#groupMemberRemove { float: right; }
+#groupMemberUpdate:hover, #groupMemberRemove:hover { background-color: #b4d9d7; }
 
 .suggestedMaterial {
   background-color: #ffae6e;
